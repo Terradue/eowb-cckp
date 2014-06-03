@@ -4,13 +4,13 @@
 #'@param iso The 3 letter country code based on ISO3 Country abbreviations (http://unstats.un.org/unsd/methods/m49/m49alpha.htm)
 #'@return TRUE if a valid code, otherwise an error is returned
 #'@examples \dontrun{
-#'checkISOcode("PRT")
+#'CheckISOCode("PRT")
 #'}
 #'
 
 
 
-checkISOcode <- function(iso){
+CheckISOCode <- function(ISO.code){
 codes <- c(NoAm_country,SoAm_country,Oceana_country,Africa_country,Asia_country,Eur_country)
   if(nchar(iso) != 3 && is.character(iso)){stop("Please enter a valid 3 letter country code")}
   if(is.numeric(iso)){stop("Please enter a 3 letter code, not a number")}
