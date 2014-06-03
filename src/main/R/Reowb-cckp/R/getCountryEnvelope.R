@@ -1,6 +1,0 @@
-
-getCountryEnvelope <- function(ISO.Code) {
-
-  
-
-}
