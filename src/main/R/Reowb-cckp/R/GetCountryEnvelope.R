@@ -1,7 +1,7 @@
 
 GetCountryEnvelope <- function(ISO.Code) {
 
-  if (IsISOCodeInvalid) { stop(paste(ISO.Code, "is not valid", sep=" ")) }
+  if (IsISOCodeInvalid(ISO.Code)) { stop(paste(ISO.Code, "is not valid", sep=" ")) }
   
   bbox <- gEnvelope(world_EEZ_V8_2014[world_EEZ_V8_2014$ISO_3digit == "PRT",])@bbox
 
