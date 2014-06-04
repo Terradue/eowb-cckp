@@ -9,6 +9,7 @@
 #'}
 #'
 #' @export
+#' @import sp
 
 GetCountryEEZ <- function(ISO.Code) {
 
