@@ -9,6 +9,6 @@
 #' @export
 GetWCSAccessPoint <- function(WCS.url) {
 
-  return(parse_url(wcs.url.template)$path)
+  return(parse_url(WCS.url)$path)
   
 }
