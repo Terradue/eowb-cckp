@@ -13,7 +13,8 @@ GetWCSAccessPoint <- function(WCS.url) {
   
   access.point <- paste(url.elements$scheme, url.elements$hostname, sep="://")
   
+  access.point <- paste(access.point, url.elements$path, sep="/")
   
-  return(paste(url.elements$hostname, url.elements$path)
+  return(access.point)
   
 }
