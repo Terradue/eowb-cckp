@@ -1,15 +1,12 @@
-#'check country codes
-#'@description Checks if the country code entered is a valid country code that data exists for
+#'check country code validity
+#'@description Checks if the country code entered is invalid
 #'
 #'@param iso The 3 letter country code based on ISO3 Country abbreviations (http://unstats.un.org/unsd/methods/m49/m49alpha.htm)
-#'@return TRUE if a valid code, otherwise an error is returned
+#'@return TRUE if an invalid code and an error message is returned, FALSE if the code is valid
 #'@examples \dontrun{
 #'IsISOCodeInvalid("PRT")
 #'}
 #'
-
-
-
 IsISOCodeInvalid <- function(ISO.code){
 codes <- c(NoAm_country,SoAm_country,Oceana_country,Africa_country,Asia_country,Eur_country)
   if (nchar(ISO.code) != 3 && is.character(ISO.code)) { 
