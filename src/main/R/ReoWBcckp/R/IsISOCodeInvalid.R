@@ -1,7 +1,7 @@
 #'check country code validity
 #'@description Checks if the country code entered is invalid
 #'
-#'@param iso The 3 letter country code based on ISO3 Country abbreviations (http://unstats.un.org/unsd/methods/m49/m49alpha.htm)
+#'@param ISO.Code The 3 letter country code based on ISO3 Country abbreviations (http://unstats.un.org/unsd/methods/m49/m49alpha.htm)
 #'@return TRUE if an invalid code and an error message is returned, FALSE if the code is valid
 #'@examples \dontrun{
 #'IsISOCodeInvalid("PRT")
