@@ -8,7 +8,12 @@
 #'
 #' @export
 GetWCSAccessPoint <- function(WCS.url) {
-
-  return(parse_url(WCS.url)$path)
+  
+  url.elements <- parse_url(WCS.url)
+  
+  access.point <- paste(url.elements$scheme, url.elements$hostname, sep="://")
+  
+  
+  return(paste(url.elements$hostname, url.elements$path)
   
 }
