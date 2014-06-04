@@ -8,6 +8,7 @@
 #'GetCountryEnvelope("PRT")
 #'}
 #'
+#' @export
 
 GetCountryEnvelope <- function(ISO.Code) {
 
