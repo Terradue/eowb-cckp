@@ -5,7 +5,7 @@
 GetCountryEnvelope(ISO.Code)
 }
 \arguments{
-  \item{iso}{The 3 letter country code based on ISO3
+  \item{ISO.code}{The 3 letter country code based on ISO3
   Country abbreviations
   (http://unstats.un.org/unsd/methods/m49/m49alpha.htm)}
 }

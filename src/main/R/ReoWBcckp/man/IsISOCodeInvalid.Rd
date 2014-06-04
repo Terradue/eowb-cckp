@@ -5,7 +5,7 @@
 IsISOCodeInvalid(ISO.code)
 }
 \arguments{
-  \item{iso}{The 3 letter country code based on ISO3
+  \item{ISO.Code}{The 3 letter country code based on ISO3
   Country abbreviations
   (http://unstats.un.org/unsd/methods/m49/m49alpha.htm)}
 }
