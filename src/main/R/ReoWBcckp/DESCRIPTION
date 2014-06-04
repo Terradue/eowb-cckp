@@ -1,6 +1,7 @@
 Package: ReoWBcckp
 Type: Package
-Title: This package supports the development of EO services for the Climate Change Knowledge Portal
+Title: This package supports the development of EO services for the Climate
+    Change Knowledge Portal
 Version: 0.1
 Date: 2014-05-22
 Author: Terradue
