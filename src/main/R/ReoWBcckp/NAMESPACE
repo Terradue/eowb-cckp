@@ -1,3 +1,5 @@
 export(GetCountryEEZ)
 export(GetCountryEnvelope)
+export(GetWCSAccessPoint)
+export(GetWCSTemplate)
 export(IsISOCodeInvalid)
