@@ -7,6 +7,8 @@
 #' GetWCSTemplate()
 #'
 #' @export
+#' @import httr
+
 GetWCSAccessPoint <- function(WCS.url) {
   
   # todo: manage port
