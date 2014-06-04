@@ -14,7 +14,7 @@
 #' res <- Query(osd.url, "application/rdf+xml", df.params)
 #' @export
 
-GetWCSCoverage <- function(WCS.access.point, df.params) {
+GetWCSCoverage <- function(WCS.access.point, df.params, by.ref=TRUE) {
 
   if(IsURLInvalid(WCS.access.point)) { stop("Invalid WCS access point") }
  
@@ -35,6 +35,12 @@ GetWCSCoverage <- function(WCS.access.point, df.params) {
   # create a named list
   params <- as.list(df.query$value)
   names(params) <- df.query$param
+  
+  url <- parse_url(WCS.access.point)
+  
+  url$query <- params
+  
+  if (by.ref) return(getURL(build_url(url)))
   
   return(getForm(WCS.access.point, .params=params))
 
