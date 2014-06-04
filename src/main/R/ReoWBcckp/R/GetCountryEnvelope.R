@@ -9,6 +9,7 @@
 #'}
 #'
 #' @export
+#' @import rgeos
 
 GetCountryEnvelope <- function(ISO.Code) {
 
