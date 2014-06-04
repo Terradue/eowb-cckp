@@ -1,6 +1,6 @@
 \name{IsISOCodeInvalid}
 \alias{IsISOCodeInvalid}
-\title{check country codes}
+\title{check country code validity}
 \usage{
 IsISOCodeInvalid(ISO.code)
 }
@@ -10,11 +10,11 @@ IsISOCodeInvalid(ISO.code)
   (http://unstats.un.org/unsd/methods/m49/m49alpha.htm)}
 }
 \value{
-TRUE if a valid code, otherwise an error is returned
+TRUE if an invalid code and an error message is returned,
+FALSE if the code is valid
 }
 \description{
-Checks if the country code entered is a valid country code
-that data exists for
+Checks if the country code entered is invalid
 }
 \examples{
 \dontrun{
