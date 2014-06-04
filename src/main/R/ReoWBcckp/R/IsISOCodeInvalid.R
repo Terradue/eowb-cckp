@@ -7,6 +7,8 @@
 #'IsISOCodeInvalid("PRT")
 #'}
 #'
+#' @export
+
 IsISOCodeInvalid <- function(ISO.code){
 codes <- c(NoAm_country,SoAm_country,Oceana_country,Africa_country,Asia_country,Eur_country)
   if (nchar(ISO.code) != 3 && is.character(ISO.code)) { 
