@@ -9,6 +9,8 @@
 #' @export
 GetWCSAccessPoint <- function(WCS.url) {
   
+  # todo: manage port
+  
   url.elements <- parse_url(WCS.url)
   
   access.point <- paste(url.elements$scheme, url.elements$hostname, sep="://")
