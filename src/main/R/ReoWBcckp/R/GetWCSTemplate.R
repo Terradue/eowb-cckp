@@ -6,6 +6,8 @@
 #' GetWCSTemplate()
 #'
 #' @export
+#' @import httr stringr 
+
 GetWCSTemplate <- function() {
 
   l <- parse_url(wcs.url.template)$query
