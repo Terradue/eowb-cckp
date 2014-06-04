@@ -8,7 +8,7 @@
 #' @export
 GetWCSTemplate <- function() {
 
-  l <- parse_url(wcs.url.template))$query
+  l <- parse_url(wcs.url.template)$query
   df.full.template <- do.call(rbind.data.frame,l)
 
   # get a column with the named list name
