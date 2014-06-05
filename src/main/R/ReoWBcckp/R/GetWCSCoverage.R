@@ -29,13 +29,8 @@ GetWCSCoverage <- function(WCS.access.point, df.params, by.ref=TRUE) {
   # since the value column will come from the df.params when doing the merge
   df.template <- subset(GetWCSTemplate(), select = c("type", "param"))
 
-print(df.template)
-  
   # merge the template and the parameters
   df.query <- subset(merge(df.template, df.params, by.y=c("type")), select = c("param", "value"))
-
-
-print(df.query)
 
   # create a named list
   params <- as.list(df.query$value)
@@ -43,12 +38,9 @@ print(df.query)
   
   url <- parse_url(WCS.access.point)
 
-print(params)
-  
   url$query <- params
   
-  #if (by.ref) return(getURL(build_url(url)))
-  if (by.ref) return(build_url(url))
+  if (by.ref) return(getURL(build_url(url)))
   
   tmp.file <- tempfile()
   download.file(getURL(build_url(url)), tmp.file)
