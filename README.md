@@ -17,7 +17,7 @@ The example code below show the Sea Level Anomaly mean value for august 2010.
 ```coffee
 library(devtools)
 library(raster)
-install_github("eowb-cckp", username="Terradue", subdir="/src/main/R/ReoWBcckp", ref="dev")
+install_github("eowb-cckp", username="Terradue", subdir="/src/main/R/ReoWBcckp", ref="master")
 library("ReoWBcckp")
 
 # work with Portugal
