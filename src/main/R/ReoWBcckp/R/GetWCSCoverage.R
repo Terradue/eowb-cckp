@@ -41,7 +41,7 @@ GetWCSCoverage <- function(WCS.access.point, df.params, by.ref=TRUE) {
   url$query <- params
   
   if (by.ref) {
-    return (getURL(build_url(url)))
+    return (build_url(url))
   } else {
     tmp.file <- tempfile()
     download.file(getURL(build_url(url)), tmp.file)
