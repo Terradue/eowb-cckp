@@ -1,5 +1,5 @@
 #' This dataset represents Exclusive Economic Zones (EEZ) of the world
-#' @name world_EEZ_V8_2014 data 
+#' @name world_EEZ_V8_2014 
 #' @docType data
 #' @keywords datasets
 NULL
