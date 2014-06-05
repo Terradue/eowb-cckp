@@ -1,18 +1,26 @@
-#' A function to return ,
-#' a response type and a data frame with queryables' type and values (NAs are be removed)
+#' A function to define an OGC Web Coverage Service GetCoverage request URL or return the raster associated to the request.
 #'
-#' @param opensearch.description URL pointing to the OpenSearch decription document
-#' @param response.type OpenSearch response type
-#' @return the OpenSearch response
+#' @param WCS.access.point URL of the OGC Web Coverage Service access point. The URL can be passed as a GetCoverage request, all parameters will be stripped and replaced with the contents of df.params
+#' @param df.params data frame with the Web Coverage Service parameters (column param) and values (column value)
+#' @param by.ref boolean to define the retruned object: if TRUE (default) a character URL to the Web Coverage Service is returned
+#' if FALSE, a raster object is returned
+#' @return WCS request character vector or a raster depending on the by.ref parameter value
+#' 
 #' @keywords utilities
 #' @examples \dontrun{
-#' osd.url <- "http://eo-virtual-archive4.esa.int/search/ASA_IM__0P/description"
-#' df.params <- GetOSQueryables(osd.url, "application/rdf+xml")
-#' df.params$value[df.params$type == "count"] <- 30
-#' df.params$value[df.params$type == "time:start"] <- "2010-01-10"
-#' df.params$value[df.params$type == "time:end"] <- "2010-01-31"
-#' res <- Query(osd.url, "application/rdf+xml", df.params)
+#' wcs.template <- GetWCSTemplate()
+#' 
+#' wcs.template$value[wcs.template$param == "service"] <- "WCS" 
+#' wcs.template$value[wcs.template$param == "version"] <- "1.0.0"
+#' wcs.template$value[wcs.template$param == "request"] <- "GetCoverage"
+#' wcs.template$value[wcs.template$param == "coverage"] <- "sla"
+#' wcs.template$value[wcs.template$param == "format"] <- "NetCDF3"
+#' wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelope("USA")
+#' 
+#' r <- GetWCSCoverage("http://catalogue.eowb-cckp.terradue.int/thredds/wcs/SeaLevel-ECV/V1.1_20131220/ESACCI-SEALEVEL-L4-MSLA-MERGED-20100815000000-fv01.nc?service=WCS&version=1.0.0&request=GetCoverage&coverage=sla&format=NetCDF3&bbox=0.1,-90,360,90", 
+#'   wcs.template, by.ref=FALSE)
 #' @export
+#' @import raster httr
 
 GetWCSCoverage <- function(WCS.access.point, df.params, by.ref=TRUE) {
 
@@ -20,10 +28,6 @@ GetWCSCoverage <- function(WCS.access.point, df.params, by.ref=TRUE) {
  
   # remove the NAs if any and keep columns type and value
   df.params <- subset(df.params[complete.cases(df.params),], select=c("type", "value"))
-
-  # avoid factors
-  # TODO: is this really needed after all?
-  # df.params <- CastCharacter(df.params)
 
   # get the queryables template, drop the value column
   # since the value column will come from the df.params when doing the merge
