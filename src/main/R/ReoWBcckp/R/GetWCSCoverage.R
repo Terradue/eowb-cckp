@@ -29,13 +29,13 @@ GetWCSCoverage <- function(WCS.access.point, df.params, by.ref=TRUE) {
   # since the value column will come from the df.params when doing the merge
   df.template <- subset(GetWCSTemplate(), select = c("type", "param"))
 
-df.template
+print(df.template)
   
   # merge the template and the parameters
   df.query <- subset(merge(df.template, df.params, by.y=c("type")), select = c("param", "value"))
 
 
-df.query
+print(df.query)
 
   # create a named list
   params <- as.list(df.query$value)
@@ -43,7 +43,7 @@ df.query
   
   url <- parse_url(WCS.access.point)
 
-params
+print(params)
   
   url$query <- params
   
