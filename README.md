@@ -1,6 +1,6 @@
 #eowb-cckp
 
-Applications to enhance the [World Bank CCKP Portal](http://sdwebx.worldbank.org/climateportal/index.cfm) by integration of European EO-based datasets
+Applications from European contributions to enhance the [World Bank's Climate Change Knowledge Portal](http://sdwebx.worldbank.org/climateportal/index.cfm) by integration of EO-based datasets.
 
 ##ReoWBcckp R package
 
@@ -10,7 +10,7 @@ ReoWBcckp is an R package to:
 * Access a country Exclusive Economic Zone (EEZ) spatial envelope
 * Access Exclusive Economic Zone (EEZ) spatial data using the country ISO code
 
-By putting those features together, extracting the European Space Agency (ESA) Climate Change Initiative data for a given country becomes straightforward.
+By putting these features together, extracting data from the European Space Agency (ESA) Climate Change Initiative for a given country becomes straightforward.
 
 ### Getting started
 
