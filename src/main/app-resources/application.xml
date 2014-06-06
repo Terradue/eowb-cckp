@@ -3,7 +3,7 @@
 xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="${artifactId}">
  <jobTemplates>
     <jobTemplate id="wb-sea-level">
-      <streamingExecutable>/application/wb-sea-level/run.sh</streamingExecutable>
+      <streamingExecutable>/application/wb-sea-level/run.R</streamingExecutable>
       <defaultParameters>
         <!--<parameter id="param1">value1</parameter>
         <parameter id="param2">value2</parameter>-->
