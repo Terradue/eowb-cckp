@@ -1,7 +1,8 @@
 #!/usr/bin/Rscript --vanilla --slave --quiet
  
 library("rciop")
-library("rgeos")
+library("ReoWBcckp")
+library("rOpenSearch")
 
 osd.url <- rciop.getparam("catalogue")
 start.date <- rciop.getparam("start.date")
