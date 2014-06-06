@@ -8,7 +8,7 @@ osd.url <- rciop.getparam("catalogue")
 start.date <- rciop.getparam("start.date")
 end.date <- rciop.getparam("end.date")
 response.type <- rciop.getparam("response.type")
-count <- rciop.getparam(count)
+count <- rciop.getparam("count")
 
 rciop.log("DEBUG", paste("track", os.track, "start", os.start, "stop", os.stop, sep=" "))
 
