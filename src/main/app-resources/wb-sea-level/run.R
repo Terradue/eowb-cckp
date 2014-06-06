@@ -78,9 +78,18 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
 my.stack <- setZ(stack(r.stack), idx)
 names(my.stack) <- idx
 
-result.filename <- paste(TMPDIR, "/", country.code, ".list")
-save(cellStats(my.stack, 'mean'), file=filename)
+# get the mean value for the country EEZ
+stack.mean <- cellStats(my.stack, 'mean')
+names(stack.mean) <- idx
 
-res <- rciop.publish(result.filename, FALSE, FALSE)
+# create the named list with the country code and the sla values
+sla.list <- list(iso=country.code, sla=stack.mean)
+
+json.filename <- paste(TMPDIR, "/", country.code, ".json")
+writeLines(toJSON(sla.list, pretty=TRUE), json.filename)
+
+res <- rciop.publish(json.filename, FALSE, FALSE)
  
 if (res$exit.code==0) { published <- res$output }
+
+file.remove(json.filename)
