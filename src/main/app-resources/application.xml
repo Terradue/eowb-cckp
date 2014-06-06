@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="${artifactId}">
+ <jobTemplates>
+    <jobTemplate id="wb-sea-level">
+      <streamingExecutable>/application/wb-sea-level/run.sh</streamingExecutable>
+      <defaultParameters>
+        <!--<parameter id="param1">value1</parameter>
+        <parameter id="param2">value2</parameter>-->
+      </defaultParameters>
+      <defaultJobconf>
+          <property id="mapred.task.timeout">6000000</property>
+      </defaultJobconf>
+    </jobTemplate>
+  </jobTemplates>
+  <workflow id="myworkflow" title="My workflow" abstract="This is my wrokflow">
+    <workflowVersion>1.0</workflowVersion>
+    <node id="n-wb-sea-leve">
+      <job id="wb-sea-leve"/>
+      <sources>
+        <!--<source refid="file:urls">/tmp/inputs</source>-->
+        <source refid="str:list">PRT<source>
+        <!--<source refid="cas:series">http://localhost/catalogue/sandbox/MER_RR__1P/description</source>-->
+      </sources>
+      <parameters>
+        <!--<parameter id="param1">value3</parameter>-->
+      </parameters>
+    </node>
+  </workflow>
 </application>
