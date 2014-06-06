@@ -12,6 +12,10 @@ ReoWBcckp is an R package to:
 
 By putting those features together, extracting the European Space Agency (ESA) Climate Change Initiative data for a given country becomes straightforward.
 
+### Getting started
+
+#### Plotting the Sea Level Anomaly for Portugal's EEZ in 2010
+
 The example code below retrieves the Sea Level Anomaly for Portugal's EEZ in 2010.
 
 ```coffee
