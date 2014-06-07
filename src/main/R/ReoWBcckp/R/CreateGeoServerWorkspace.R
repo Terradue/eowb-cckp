@@ -9,7 +9,7 @@
 #' }
 #'
 #' @export
-#' @import RCurl
+#' @import RCurl RJSONIO
 
 CreateGeoServerWorkspace <- function(geoserver.access.point, workspace) {
 
