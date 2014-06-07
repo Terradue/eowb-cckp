@@ -13,8 +13,12 @@
 
 CreateGeoServerWorkspace <- function(geoserver.access.point, workspace) {
 
-  content <- 
+  content <- toJSON(list(workspace=list(name=workspace)))
 
   server.response <- httpPUT(url=geoserver.access.point, content=content)
+  
+  
+  
+  return(server.response)
 
 }
