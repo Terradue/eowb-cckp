@@ -18,6 +18,6 @@ POSTRequest <- function(access.point, content.type, content) {
   
   h = parseHTTPHeader( header$value() )
   
-  return(list(h["status"], h["statusMessage"]))
+  return(list(status=h["status"], message=h["statusMessage"]))
   
 }
