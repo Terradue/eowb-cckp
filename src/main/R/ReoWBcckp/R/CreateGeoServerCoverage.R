@@ -30,6 +30,13 @@ CreateGeoServerCoverage <- function(geoserver.access.point,
     native.bbox,
     latlon.bbox) {
 
+  access.point <- paste(geoserver.access.point,
+                    "workspaces", workspace, 
+                    "coveragestores", coveragestore, 
+                    "coverages", sep="/")
+
+  content.type <- "application/json"
+  
   content <- list(coverage=list(name=name, 
     title=title,
     abstract=abstract,
@@ -39,14 +46,9 @@ CreateGeoServerCoverage <- function(geoserver.access.point,
     nativeBoundingBox=native.bbox,
     latLonBoundingBox=latlon.bbox
   ))
-
-  server.response <- httpPUT(
-          url=paste(geoserver.access.point,
-                    "workspaces", workspace, 
-                    "coveragestores", coverage.store, 
-                    "coverages", sep="/"),
-                    content=content)
   
-  return(server.response)
+  # todo: check if workspace exists, if not create it
+
+  return(POSTRequest(access.point, content.type, content))
 
 }
