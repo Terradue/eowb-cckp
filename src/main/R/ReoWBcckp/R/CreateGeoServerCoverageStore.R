@@ -20,13 +20,17 @@ CreateGeoServerCoverageStore <- function(geoserver.access.point, workspace, name
   # todo: check if workspace exists, if not create it
   
   content <- toJSON(list(content <- list(coverageStore=list(name=name, 
-  enabled=enabled, 
-  type=type, 
-  url=url,
-  workspace=workspace
-  )))
+      enabled=enabled, 
+      type=type, 
+      url=url,
+      workspace=workspace
+    )))
 
-  server.response <- httpPUT(url=geoserver.access.point, content=content)
+  server.response <- httpPUT(
+          url=paste(geoserver.access.point,
+                    "workspaces", workspace, 
+                    "coveragestores", sep="/"),
+                    content=content)
   
   return(server.response)
 
