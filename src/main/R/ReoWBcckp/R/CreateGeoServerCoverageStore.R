@@ -24,7 +24,7 @@ CreateGeoServerCoverageStore <- function(geoserver.access.point, workspace, name
       type=type, 
       url=url,
       workspace=workspace
-    )))
+    ))))
 
   server.response <- httpPUT(
           url=paste(geoserver.access.point,
