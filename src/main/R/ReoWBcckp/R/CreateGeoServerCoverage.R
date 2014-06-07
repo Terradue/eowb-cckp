@@ -18,7 +18,7 @@
 #' @export
 #' @import RCurl RJSONIO
 
-CreateGeoServerCoverageStore <- function(geoserver.access.point, 
+CreateGeoServerCoverage <- function(geoserver.access.point, 
     workspace, 
     coveragestore, 
     name, 
