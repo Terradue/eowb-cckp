@@ -10,7 +10,7 @@
 #' @param enabled boolean to define if the coverage store is enabled, defaults to TRUE
 #' @param native.crs native CRS of the coverage (defaults to EPSG:4326)
 #' @param latlon.crs Lat/Lon CRS of the coverage (defaults to EPSG:4326)
-#' @return boolean TRUE when the coverage was created, FALSE otherwise (check message returned)
+#' @return boolean TRUE when the coverage was created, FALSE otherwise (check the message returned)
 #' @examples \dontrun{
 #' CreateGeoServerCoverage("localhost:8080/geoserver", "acme", "cs", "mycoverage", "this is a title")
 #' }
