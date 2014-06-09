@@ -36,7 +36,7 @@ CreateGeoServerCoverage(geoserver.access.point, workspace, coveragestore, name,
 }
 \value{
 boolean TRUE when the coverage was created, FALSE otherwise
-(check message returned)
+(check the message returned)
 }
 \description{
 Creates a GeoServer coverage store in a GeoServer instance.
