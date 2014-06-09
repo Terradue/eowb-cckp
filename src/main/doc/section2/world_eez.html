@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>World Exclusive Economic Zone (EEZ)</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+
+
+
+
+</head>
+
+<body>
+<h1>World Exclusive Economic Zone (EEZ)</h1>
+
+<h2>What is an EEZ</h2>
+
+<p>An exclusive economic zone (EEZ) is a seazone prescribed by the United Nations Convention on the Law of the Sea over which state has special rights over the exploration and use of marine resources, including energy production from water and wind.</p>
+
+<p>It stretches from the baseline out to 200 nautical miles from its coast. In colloquial usage, the term may include the continental shelf. The term does not include either the territorial sea or the continental shelf beyond the 200 n.m. limit. </p>
+
+<p>The difference between the territorial sea and the exclusive economic zone is that the first confers full sovereignty over the waters, whereas the second is merely a &ldquo;sovereign right&rdquo; which refers to the coastal state&#39;s rights below the surface of the sea. </p>
+
+<p>Source: <a href="http://en.wikipedia.org/wiki/Exclusive_economic_zone">Wikipedia</a></p>
+
+<h2>Data source</h2>
+
+<p>The data was downloaded from the <a href="http://www.marineregions.org/">Marine Regions</a> website.</p>
+
+<p>Marine Regions is an integration of the VLIMAR Gazetteer and the VLIZ Maritime Boundaries Geodatabase. The VLIMAR Gazetteer is a database with geographic, mainly marine names such as seas, sandbanks, seamounts, ridges, bays or even standard sampling stations used in marine research. The geographic cover of the VLIMAR gazetteer is global but initially focused on the Belgian Continental Shelf and the Scheldt Estuary and the Southern Bight of the North Sea. Gradually more regional and global geographic information was added to VLIMAR and combining this information with the Maritime Boundaries database, representing the Exclusive Economic Zone (EEZ) of the world, led to the creation of marineregions.org. </p>
+
+<h2>Data description</h2>
+
+<p>The Marine Regions provides several versions of the EEZ geodatabase version and for each two resolutions.</p>
+
+<p>The EEZ geodatabase used in this package is:</p>
+
+<p>World EEZ v8 of 2014-02-28, low resolution.</p>
+
+<p>The download required filing a form with the Name, Organisation, Email, Country and purpose of download.</p>
+
+<h2>Data format</h2>
+
+<p>The data is provided as a Shapefile.</p>
+
+<h2>Data pre-processing</h2>
+
+<p>The data was imported into R and saved as an R object to a file:</p>
+
+<pre><code class="R">library(rgdal)
+world_EEZ_V8_2014 &lt;- readOGR(&quot;~/Downloads/World_EEZ_v8_20140228_LR/&quot;, &quot;World_EEZ_v8_2014&quot;)
+save(world_EEZ_V8_2014, file=&quot;~/Downloads/world_EEZ_V8_2014.rda&quot;)
+</code></pre>
+
+<p>The file world_EEZ_V8_2014.rda was then pushed to <a href="https://github.com/Terradue/eowb-cckp/blob/master/src/main/R/ReoWBcckp/data/world_EEZ_V8_2014.rda">https://github.com/Terradue/eowb-cckp/blob/master/src/main/R/ReoWBcckp/data/world_EEZ_V8_2014.rda</a></p>
+
+</body>
+
+</html>
+
