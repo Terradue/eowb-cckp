@@ -4,6 +4,7 @@
 #' @keywords utilities
 #' @examples \dontrun{
 #' GetWCSTemplate()
+#' }
 #'
 #' @export
 #' @import httr stringr 
