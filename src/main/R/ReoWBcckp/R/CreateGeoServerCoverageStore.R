@@ -24,7 +24,7 @@ CreateGeoServerCoverageStore <- function(geoserver.access.point, workspace, name
 
   content.type <- "application/json"
   
-  content <- toJSON(list(content <- list(coverageStore=list(name=name, 
+  content <- toJSON(list(coverageStore=list(name=name, 
       enabled=enabled, 
       type=type, 
       url=url,
