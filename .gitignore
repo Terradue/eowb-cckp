@@ -4,3 +4,6 @@ Read-and-delete-me
 /.project
 
 /target/
+=======
+_book
+*.html

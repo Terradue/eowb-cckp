@@ -75,6 +75,33 @@
 					</execution>
 				</executions>
 			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.3.1</version>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>R</executable>
+							<workingDirectory>${project.build.directory}/R</workingDirectory>
+							<arguments>
+								<argument>CMD</argument>
+								<argument>INSTALL</argument>
+								<argument>--build</argument>
+								<argument>-l</argument>
+								<argument>${project.build.directory}</argument>
+								<argument>${basedir}/src/main/R/ReoWBcckp</argument>
+								<argument>ReoWBcckp</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -154,6 +181,18 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.6</version>
 				<executions>
+					<execution>
+						<id>create target</id>
+						<phase>initialize</phase>
+						<configuration>
+							<target>
+								<mkdir dir="${project.build.directory}/R" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
 					<execution>
 						<id>change perm</id>
 						<phase>install</phase>
