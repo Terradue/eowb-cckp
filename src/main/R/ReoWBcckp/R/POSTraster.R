@@ -17,6 +17,7 @@
 
 POSTraster <- function(access.point, workspace, coverage.store, raster) {
   # todo: use RCurl instead of the system call
+  # todo: manage GeoServer authentication
   
   # store the current work dir
   orig.wd <- getwd()
