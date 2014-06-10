@@ -29,7 +29,7 @@ CreateGeoServerCoverageStore <- function(geoserver.access.point, workspace, name
       type=type, 
       url=url,
       workspace=workspace)
-      )))
+      ))
 
   return(POSTRequest(access.point, content.type, content))
   
