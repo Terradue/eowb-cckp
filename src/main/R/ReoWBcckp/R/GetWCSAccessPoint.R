@@ -6,6 +6,7 @@
 #' @examples \dontrun{
 #' GetWCSTemplate()
 #'
+#' }
 #' @export
 #' @import httr
 
