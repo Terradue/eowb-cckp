@@ -19,6 +19,8 @@
 #' 
 #' r <- GetWCSCoverage("http://catalogue.eowb-cckp.terradue.int/thredds/wcs/SeaLevel-ECV/V1.1_20131220/ESACCI-SEALEVEL-L4-MSLA-MERGED-20100815000000-fv01.nc?service=WCS&version=1.0.0&request=GetCoverage&coverage=sla&format=NetCDF3&bbox=0.1,-90,360,90", 
 #'   wcs.template, by.ref=FALSE)
+#' }
+#'
 #' @export
 #' @import raster httr
 
