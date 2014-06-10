@@ -2,11 +2,12 @@ Package: ReoWBcckp
 Type: Package
 Title: This package supports the development of EO services for the Climate
     Change Knowledge Portal
-Version: 0.1
+Version: ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
 Date: 2014-05-22
 Author: Terradue
 LazyData: true
 Description: More about what it does (maybe more than one line)
 License: Apache License, Version 2.0
 Depends:
-    RCurl
+    RCurl,
+    bitops
