@@ -150,7 +150,7 @@
 					</execution>
 					<execution>
 						<id>R install</id>
-						<phase>install</phase>
+						<phase>prepare-package</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>
@@ -161,7 +161,7 @@
 								<argument>CMD</argument>
 								<argument>INSTALL</argument>
 								<argument>-l</argument>
-								<argument>${project.build.directory}/R/lib</argument>
+								<argument>${project.build.directory}/R/lib/</argument>
 								<argument>${project.build.directory}/R/src/ReoWBcckp_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tar.gz</argument>
 							</arguments>
 						</configuration>
