@@ -319,8 +319,8 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>github-upload</id>
-						<phase>deploy-R</phase>
+						<id>github-upload-R</id>
+						<phase>deploy</phase>
 						<goals>
 							<goal>release</goal>
 						</goals>
