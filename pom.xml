@@ -164,7 +164,7 @@
 								<argument>INSTALL</argument>
 								<argument>-l</argument>
 								<argument>/application/share/R/library</argument>
-								<argument>${project.build.directory}/R/src/ReoWBcckp_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tgz</argument>
+								<argument>${project.build.directory}/R/src/ReoWBcckp_*</argument>
 							</arguments>
 						</configuration>
 					</execution>
@@ -315,6 +315,20 @@
 							<releaseName>v${project.version}</releaseName>
 							<tag>v${project.version}</tag>
 							<artifact>${project.build.directory}/rpm/${project.artifactId}/RPMS/noarch/${project.artifactId}-${project.version}-ciop.noarch.rpm</artifact>
+							<overwriteArtifact>true</overwriteArtifact>
+						</configuration>
+					</execution>
+					<execution>
+						<id>github-upload</id>
+						<phase>deploy-R</phase>
+						<goals>
+							<goal>release</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<releaseName>v${project.version}</releaseName>
+							<tag>v${project.version}</tag>
+							<artifact>${project.build.directory}/R/src/ReoWBcckp_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}_R_x86_64-redhat-linux-gnu.tgz</artifact>
 							<overwriteArtifact>true</overwriteArtifact>
 						</configuration>
 					</execution>
