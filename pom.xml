@@ -161,6 +161,24 @@
 								<argument>CMD</argument>
 								<argument>INSTALL</argument>
 								<argument>-l</argument>
+								<argument>${project.build.directory}/R/lib</argument>
+								<argument>${project.build.directory}/R/src/ReoWBcckp_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tar.gz</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>R install app</id>
+						<phase>install</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>R</executable>
+							<workingDirectory>${project.build.directory}/R/src</workingDirectory>
+							<arguments>
+								<argument>CMD</argument>
+								<argument>INSTALL</argument>
+								<argument>-l</argument>
 								<argument>/application/share/R/library</argument>
 								<argument>${project.build.directory}/R/src/ReoWBcckp_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tar.gz</argument>
 							</arguments>
