@@ -142,10 +142,8 @@
 							<workingDirectory>${project.build.directory}/R/src</workingDirectory>
 							<arguments>
 								<argument>CMD</argument>
-								<argument>INSTALL</argument>
-								<argument>--build</argument>
-								<argument>-l</argument>
-								<argument>${project.build.directory}/R/lib</argument>
+								<argument>build</argument>
+								<argument>--binary</argument>
 								<argument>ReoWBcckp</argument>
 							</arguments>
 						</configuration>
@@ -164,7 +162,7 @@
 								<argument>INSTALL</argument>
 								<argument>-l</argument>
 								<argument>/application/share/R/library</argument>
-								<argument>${project.build.directory}/R/src/ReoWBcckp_*</argument>
+								<argument>${project.build.directory}/R/src/ReoWBcckp_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tar.gz</argument>
 							</arguments>
 						</configuration>
 					</execution>
@@ -328,7 +326,7 @@
 						<configuration>
 							<releaseName>v${project.version}</releaseName>
 							<tag>v${project.version}</tag>
-							<artifact>${project.build.directory}/R/src/ReoWBcckp_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}_R_x86_64-redhat-linux-gnu.tgz</artifact>
+							<artifact>${project.build.directory}/R/src/ReoWBcckp_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tar.gz</artifact>
 							<overwriteArtifact>true</overwriteArtifact>
 						</configuration>
 					</execution>
