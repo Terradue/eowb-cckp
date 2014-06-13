@@ -22,6 +22,9 @@
 		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.deploy.skip>true</maven.deploy.skip>
+		<github.global.server>github</github.global.server>
+		<github.site.repositoryName>eowb-cckp</github.site.repositoryName>
+		<github.site.repositoryOwner>Terradue</github.site.repositoryOwner>
 	</properties>
 
 	<repositories>
@@ -184,6 +187,21 @@
 							</arguments>
 						</configuration>
 					</execution>
+					<execution>
+						<id>rgitbook</id>
+						<phase>site</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>R</executable>
+							<arguments>
+								<argument>-e</argument>
+								<argument><![CDATA[library(Rgitbook); buildGitbook(source.dir='${basedir}/src/main/doc', out.dir='${project.build.directory}/R/doc');]]></argument>
+							</arguments>
+						</configuration>
+					</execution>
+
 				</executions>
 			</plugin>
 
@@ -350,7 +368,52 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.8</version>
+				<configuration>
+					<message>Creating site for ${project.version}</message>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site-deploy</phase>
+						<configuration>
+							<outputDirectory>${project.build.directory}/R/doc</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.9</version>
+				<configuration>
+					<message>Creating site for ${project.version}</message>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site-deploy</phase>
+						<configuration>
+							<outputDirectory>${project.build.directory}/R/doc</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+					<skipDeploy>true</skipDeploy>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

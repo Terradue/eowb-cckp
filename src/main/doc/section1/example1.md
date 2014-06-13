@@ -1,6 +1,5 @@
 
 
-
 # Hello world!
 
 
@@ -12,4 +11,3 @@
 ```
 
 ![plot of chunk label, options](figure/label, options.png) 
-
