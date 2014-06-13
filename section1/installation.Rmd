@@ -1,1 +1,14 @@
-#Installation
+# Installation
+
+## Software Repository
+
+The code is available on GitHub at the address: https://github.com/Terradue/eowb-cckp
+
+## Installing the package
+
+Use *devtools* to install the package:
+
+```r
+install_github("eowb-cckp", username="Terradue", subdir="/src/main/R/ReoWBcckp", ref="master")
+library("ReoWBcckp")
+```
