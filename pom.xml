@@ -205,7 +205,7 @@
 				</executions>
 			</plugin>
 
-			<plugin>
+			<!--<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.6</version>
 				<executions>
@@ -319,7 +319,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -338,7 +338,7 @@
 				<artifactId>github-release-plugin</artifactId>
 				<version>1.0.3</version>
 				<executions>
-					<execution>
+					<!--<execution>
 						<id>github-upload</id>
 						<phase>deploy</phase>
 						<goals>
@@ -351,7 +351,7 @@
 							<artifact>${project.build.directory}/rpm/${project.artifactId}/RPMS/noarch/${project.artifactId}-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}-ciop.noarch.rpm</artifact>
 							<overwriteArtifact>true</overwriteArtifact>
 						</configuration>
-					</execution>
+					</execution>-->
 					<execution>
 						<id>github-upload-R</id>
 						<phase>deploy</phase>
@@ -362,7 +362,7 @@
 						<configuration>
 							<releaseName>v${project.version}</releaseName>
 							<tag>v${project.version}</tag>
-							<artifact>${project.build.directory}/R/src/ReoWBcckp_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tar.gz</artifact>
+							<artifact>${project.build.directory}/R/src/rOpenSearch_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tar.gz</artifact>
 							<overwriteArtifact>true</overwriteArtifact>
 						</configuration>
 					</execution>
