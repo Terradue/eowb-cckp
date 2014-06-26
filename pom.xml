@@ -214,7 +214,7 @@
 							<executable>R</executable>
 							<arguments>
 								<argument>-e</argument>
-								<argument><![CDATA[library(Rgitbook); buildGitbook(source.dir='${basedir}/src/main/doc', out.dir='${project.build.directory}/R/doc');]]></argument>
+								<argument><![CDATA[library(Rgitbook); buildGitbook(source.dir='${project.build.directory}/R/src/doc', out.dir='${project.build.directory}/R/doc');]]></argument>
 							</arguments>
 						</configuration>
 					</execution>
