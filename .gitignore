@@ -9,3 +9,4 @@ _book
 *.html
 
 /src/main/doc/.rmdbuild
+.RData
