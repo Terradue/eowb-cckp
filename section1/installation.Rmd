@@ -10,7 +10,7 @@ Start an R session and run:
 
 ```coffee
 install_url("https://github.com/Terradue/eowb-cckp/releases/download/v0.1-SNAPSHOT/ReoWBcckp_0.1.0.tar.gz")
-library(rOpenSearch)
+library(ReoWBcckp)
 ```
 
 
@@ -18,7 +18,7 @@ library(rOpenSearch)
 
 ### Building and installing the development version
 
-The rOpenSearch package is built using maven.
+The ReoWBcckp package is built using maven.
 
 From a terminal: 
 
@@ -29,7 +29,7 @@ cd eowb-cckp
 mvn compile
 ```
 
-That generates a compressed archive with the rOpenSearch package in:
+That generates a compressed archive with the ReoWBcckp package in:
 
 ```
 ~/eowb-cckp/target/R/src/ReoWBcckp_x.y.z.tar.gz
@@ -37,7 +37,7 @@ That generates a compressed archive with the rOpenSearch package in:
 To install the package, start an R session and run:
 
 ```coffee
-install.packages("~/rOpenSearch/target/R/src/ReoWBcckp_x.y.z.tar.gz", repos=NULL, type="source")
+install.packages("~/ReoWBcckp/target/R/src/ReoWBcckp_x.y.z.tar.gz", repos=NULL, type="source")
 ```
 
 > Note x.y.z is the development version number.
