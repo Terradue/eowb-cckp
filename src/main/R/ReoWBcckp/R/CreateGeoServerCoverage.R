@@ -42,10 +42,11 @@ CreateGeoServerCoverage <- function(geoserver.access.point,
     abstract=abstract,
     nativeCRS=native.crs,
     srs=srs,
-    enabled=enabled,
-    nativeBoundingBox=native.bbox,
-    latLonBoundingBox=latlon.bbox
-  )))
+    enabled=enabled)))
+#,
+#    nativeBoundingBox=native.bbox,
+#    latLonBoundingBox=latlon.bbox
+#  )))
  content 
   # todo: check if workspace exists, if not create it
 
