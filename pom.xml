@@ -111,6 +111,23 @@
 							</resources>
 						</configuration>
 					</execution>
+						<execution>
+						<id>copy-doc-src</id>
+						<!-- here the phase you need -->
+<phase>pre-site</phase>
+<goals>
+<goal>copy-resources</goal>
+</goals>
+<configuration>
+<outputDirectory>${project.build.directory}/R/src/doc</outputDirectory>
+<resources>
+<resource>
+<directory>${basedir}/src/main/doc</directory>
+<filtering>false</filtering>
+</resource>
+</resources>
+</configuration>
+</execution>
 				</executions>
 			</plugin>
 
