@@ -34,7 +34,7 @@
 
 
         
-    <div class="book" data-github="Terradue/eowb-cckp" data-level="1" data-basepath=".." data-revision="1403812474229">
+    <div class="book" data-github="Terradue/eowb-cckp" data-level="1" data-basepath=".." data-revision="1403819572138">
     <div class="book-header">
     <!-- Actions Left -->
     <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>
@@ -292,6 +292,35 @@
                     <section class="normal" id="section-gitbook_4">
                     
                         <h1 id="installation">Installation</h1>
+<h3 id="installing-a-release">Installing a release</h3>
+<p>The releases are available at: <a href="https://github.com/Terradue/eowb-cckp/releases" target="_blank">https://github.com/Terradue/eowb-cckp/releases</a></p>
+<p>Releases can be installed using <a href="http://www.rstudio.com/products/rpackages/devtools/" target="_blank">devtools</a></p>
+<p>Start an R session and run:</p>
+<pre><code class="lang-coffee">install_url(&quot;https://github.com/Terradue/eowb-cckp/releases/download/v0.1-SNAPSHOT/ReoWBcckp_0.1.0.tar.gz&quot;)
+library(rOpenSearch)
+</code></pre>
+<blockquote>
+<p>Note the example above installs the v0.1-SNAPSHOT release, adapt it to the current release</p>
+</blockquote>
+<h3 id="building-and-installing-the-development-version">Building and installing the development version</h3>
+<p>The rOpenSearch package is built using maven.</p>
+<p>From a terminal: </p>
+<pre><code class="lang-bash"><span class="hljs-built_in">cd</span>
+git clone git@github.com:Terradue/eowb-cckp.git
+<span class="hljs-built_in">cd</span> eowb-cckp
+mvn compile
+</code></pre>
+<p>That generates a compressed archive with the rOpenSearch package in:</p>
+<pre><code>~/eowb-cckp/target/R/src/ReoWBcckp_x.y.z.tar.gz
+</code></pre><p>To install the package, start an R session and run:</p>
+<pre><code class="lang-coffee">install.packages(&quot;~/rOpenSearch/target/R/src/ReoWBcckp_x.y.z.tar.gz&quot;, repos=NULL, type=&quot;source&quot;)
+</code></pre>
+<blockquote>
+<p>Note x.y.z is the development version number.</p>
+</blockquote>
+<p>Then load the library:</p>
+<pre><code class="lang-coffee">library(ReoWBcckp)
+</code></pre>
 
                     
                     </section>
