@@ -4,11 +4,16 @@ library("rciop")
 library("ReoWBcckp")
 library("rOpenSearch")
 
+load("/application/.geoserver.authn.RData")
+
 osd.url <- rciop.getparam("catalogue")
 start.date <- rciop.getparam("start.date")
 end.date <- rciop.getparam("end.date")
 response.type <- rciop.getparam("response.type")
 count <- rciop.getparam("count")
+
+# get the GeoServer REST access point
+geoserver <- rciop.getparam("geoserver")
 
 rciop.log("DEBUG", paste("track", os.track, "start", os.start, "stop", os.stop, sep=" "))
 
@@ -43,6 +48,9 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
   
   rciop.log("DEBUG", paste("Country ISO code:", country.code, sep=" "))
   
+  # create the country workspace on GeoServer
+  CreateGeoServerWorkspace(geoserver, country.code)
+  
   # complete the WCS request with the country envelope (MBR) 
   wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelope(country.code)
   
@@ -70,6 +78,18 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
     
     # delete the WCS downloaded raster (the other raster are in memory)
     file.remove(r@file@name)
+  
+    # define the coverage store name including variable and the date 
+    coverage.store <- paste("sla", format(as.Date(coverages$start[i]), format="%Y-%m"), sep="_")
+  
+    CreateGeoServerCoverageStore(geoserver, 
+                                country.code,
+                                coverage.store,
+                                TRUE,
+                                "GeoTIFF",
+                                "file:data/test.tif")
+    
+    POSTraster(geoserver, country.code, coverage.store, r.stack)
   
   }
 }
