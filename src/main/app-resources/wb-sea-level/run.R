@@ -3,6 +3,7 @@
 library("rciop")
 library("ReoWBcckp")
 library("rOpenSearch")
+library("raster")
 
 load("/application/.geoserver.authn.RData")
 
@@ -14,8 +15,6 @@ count <- rciop.getparam("count")
 
 # get the GeoServer REST access point
 geoserver <- rciop.getparam("geoserver")
-
-rciop.log("DEBUG", paste("track", os.track, "start", os.start, "stop", os.stop, sep=" "))
 
 # prepare the catalogue request
 df.params <- GetOSQueryables(osd.url, response.type)
@@ -72,7 +71,8 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
     
     # add the clipped raster to the list
     r.stack <- c(r.stack, r.mask)
-    
+
+    rciop.log("INFO", format(as.Date(coverages$start[i]), format="%Y-%m"))    
     # update the index
     idx <- c(idx, format(as.Date(coverages$start[i]), format="%Y-%m"))
     
@@ -89,10 +89,10 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
                                 "GeoTIFF",
                                 "file:data/test.tif")
     
-    POSTraster(geoserver, country.code, coverage.store, r.stack)
-  
+    POSTraster(geoserver, country.code, coverage.store, r.mask)
+    setwd(TMPDIR) 
   }
-}
+
   
 # create the stack
 my.stack <- setZ(stack(r.stack), idx)
@@ -113,3 +113,4 @@ res <- rciop.publish(json.filename, FALSE, FALSE)
 if (res$exit.code==0) { published <- res$output }
 
 file.remove(json.filename)
+}

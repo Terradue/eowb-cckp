@@ -28,7 +28,7 @@ POSTraster <- function(access.point, workspace, coverage.store, raster) {
   setwd(wd)
   
   # write the raster 
-  writeRaster(raster, filename=paste(wd,"temp.tif", sep="/"), format="GTiff", overwrite=TRUE)
+  writeRaster(raster, filename=paste(wd, "temp.tif", sep="/"), format="GTiff", overwrite=TRUE)
   
   # build the access point
   end.point <- paste(access.point, "workspaces", workspace, "coveragestores", coverage.store, "file.geotiff", sep="/")
@@ -42,8 +42,8 @@ POSTraster <- function(access.point, workspace, coverage.store, raster) {
   # go back to the previous work dir
   if (!is.null(orig.wd)) setwd(orig.wd)
   
-  # clean up the temporary folder and temp.tif
-  unlink(wd, recursive = TRUE)
+  ### clean up the temporary folder and temp.tif
+  ## unlink(wd, recursive = TRUE)
   
   return(ret) 
 
