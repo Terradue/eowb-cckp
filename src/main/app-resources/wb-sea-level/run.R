@@ -90,7 +90,6 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
                                 "file:data/test.tif")
     
     POSTraster(geoserver, country.code, coverage.store, r.mask)
-    setwd(TMPDIR) 
   }
 
   
