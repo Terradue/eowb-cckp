@@ -104,7 +104,9 @@ names(stack.mean) <- idx
 # create the named list with the country code and the sla values
 sla.list <- list(iso=country.code, sla=stack.mean)
 
-json.filename <- paste(TMPDIR, "/", country.code, ".json")
+json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
+
+rciop.log("DEBUG", print(json.filename))
 writeLines(toJSON(sla.list, pretty=TRUE), json.filename)
 
 res <- rciop.publish(json.filename, FALSE, FALSE)

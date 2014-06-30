@@ -27,14 +27,15 @@ POSTraster <- function(access.point, workspace, coverage.store, raster) {
   #dir.create(wd)
   #setwd(wd)
   tmp.file <- tempfile()
+  print(tmp.file)
   # write the raster 
   writeRaster(raster, filename=tmp.file, format="GTiff", overwrite=TRUE)
   
   # build the access point
   end.point <- paste(access.point, "workspaces", workspace, "coveragestores", coverage.store, "file.geotiff", sep="/")
-  
+  print(end.point)
   command.args <- paste("-u ", geoserver.authn, " -v -XPUT -H 'Content-type: image/tiff' --data-binary @", tmp.file, end.point, sep="")
- 
+  print(command.args)
   # invoke the system call to curl.
   # I'd rather have done this with RCurl but couldn't get it working ;-(
   ret <- system2("curl", command.args, stdout=TRUE, stderr=TRUE)
