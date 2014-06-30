@@ -2,8 +2,9 @@
  
 library("rciop")
 library("ReoWBcckp")
-library("rOpenSearch")
 library("raster")
+
+library("ReoWBcckp", lib.loc="/application/share/R/library/")
 
 load("/application/.geoserver.authn.RData")
 
@@ -87,7 +88,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
                                 coverage.store,
                                 TRUE,
                                 "GeoTIFF",
-                                "file:data/test.tif")
+                                "file:data/raster.tif")
     
     POSTraster(geoserver, country.code, coverage.store, r.mask)
   }

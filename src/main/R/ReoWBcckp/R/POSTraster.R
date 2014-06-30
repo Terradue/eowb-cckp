@@ -17,34 +17,25 @@
 
 POSTraster <- function(access.point, workspace, coverage.store, raster) {
   # todo: use RCurl instead of the system call
-  # todo: manage GeoServer authentication
   
   # store the current work dir
   orig.wd <- getwd()
   
-  # change the work dir to a random folder
-  #wd <- tempdir() 
-  #dir.create(wd)
-  #setwd(wd)
-  tmp.file <- tempfile()
-  print(tmp.file)
+  tmp.file <- "raster.tif" #tempfile()
+ 
   # write the raster 
   writeRaster(raster, filename=tmp.file, format="GTiff", overwrite=TRUE)
   
   # build the access point
   end.point <- paste(access.point, "workspaces", workspace, "coveragestores", coverage.store, "file.geotiff", sep="/")
-  print(end.point)
-  command.args <- paste("-u ", geoserver.authn, " -v -XPUT -H 'Content-type: image/tiff' --data-binary @", tmp.file, end.point, sep="")
-  print(command.args)
+  
+  command.args <- paste("-u '", geoserver.authn, "' -v -XPUT -H 'Content-type: image/tiff' --data-binary @", tmp.file, " ", end.point, sep="")
+  
   # invoke the system call to curl.
   # I'd rather have done this with RCurl but couldn't get it working ;-(
   ret <- system2("curl", command.args, stdout=TRUE, stderr=TRUE)
  
-  # go back to the previous work dir
-  #if (!is.null(orig.wd)) setwd(orig.wd)
-  
-  ### clean up the temporary folder and temp.tif
-  ## unlink(wd, recursive = TRUE)
+  file.remove(tmp.file)
   
   return(ret) 
 
