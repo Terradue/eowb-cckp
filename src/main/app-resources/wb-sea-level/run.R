@@ -1,8 +1,8 @@
 #!/usr/bin/Rscript --vanilla --slave --quiet
  
 library("rciop")
-library("ReoWBcckp")
 library("raster")
+library("rOpenSearch")
 
 library("ReoWBcckp", lib.loc="/application/share/R/library/")
 
