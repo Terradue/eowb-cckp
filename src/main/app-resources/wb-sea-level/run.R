@@ -6,16 +6,11 @@ library("rOpenSearch")
 
 library("ReoWBcckp", lib.loc="/application/share/R/library/")
 
-load("/application/.geoserver.authn.RData")
-
 osd.url <- rciop.getparam("catalogue")
 start.date <- rciop.getparam("start.date")
 end.date <- rciop.getparam("end.date")
 response.type <- rciop.getparam("response.type")
 count <- rciop.getparam("count")
-
-# get the GeoServer REST access point
-geoserver <- rciop.getparam("geoserver")
 
 # prepare the catalogue request
 df.params <- GetOSQueryables(osd.url, response.type)
@@ -26,6 +21,9 @@ df.params$value[df.params$type == "time:end"] <- end.date
 
 # submit the query
 res <- Query(osd.url, response.type, df.params)
+
+series <- xmlToDataFrame(nodes = getNodeSet(xmlParse(res), 
+    "//dclite4g:Series"), stringsAsFactors = FALSE)
 
 # create a named list with the WCS online resources and associated start date 
 coverages <- list(online.resource=rev(xpathSApply(xmlParse(res), "//dclite4g:DataSet/dclite4g:onlineResource/ws:WCS/@rdf:about")), 
@@ -48,14 +46,9 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
   
   rciop.log("DEBUG", paste("Country ISO code:", country.code, sep=" "))
   
-  # create the country workspace on GeoServer
-  CreateGeoServerWorkspace(geoserver, country.code)
-  
   # complete the WCS request with the country envelope (MBR) 
   wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelope(country.code)
   
-  r.stack <- c()
-  idx <- c()
   json.list <- c()
   
   for (i in 1:length(coverages$online.resource)) {
@@ -70,48 +63,17 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
     
     # clip with the country EEZ
     r.mask <- mask(r.shift, GetCountryEEZ(country.code))
-    
-    # add the clipped raster to the list
-    r.stack <- c(r.stack, r.mask)
-
-    rciop.log("INFO", format(as.Date(coverages$start[i]), format="%Y-%m"))    
-    # update the index
-    idx <- c(idx, format(as.Date(coverages$start[i]), format="%Y-%m"))
   
-    json.list <- c(json.list, list(iso=country.code, var="SLA", date=format(as.Date(coverages$start[i]), format="%Y-%m"), value=cellStats(r.mask, stat="mean")))
+    json.list <- c(json.list, list(list(iso=country.code, var=series[1,"identifier"], date=format(as.Date(coverages$start[i]), format="%Y-%m"), value=cellStats(r.mask, stat="mean"))))
     
     # delete the WCS downloaded raster (the other raster are in memory)
     file.remove(r@file@name)
   
-    # define the coverage store name including variable and the date 
-    coverage.store <- paste("sla", format(as.Date(coverages$start[i]), format="%Y-%m"), sep="_")
-  
-    CreateGeoServerCoverageStore(geoserver, 
-                                country.code,
-                                coverage.store,
-                                TRUE,
-                                "GeoTIFF",
-                                "file:data/raster.tif")
-    
-    POSTraster(geoserver, country.code, coverage.store, r.mask)
   }
 
-  
-# create the stack
-my.stack <- setZ(stack(r.stack), idx)
-names(my.stack) <- idx
-
-# get the mean value for the country EEZ
-stack.mean <- cellStats(my.stack, 'mean')
-names(stack.mean) <- idx
-
-# create the named list with the country code and the sla values
-sla.list <- list(iso=country.code, sla=stack.mean)
 
 json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
 
-rciop.log("DEBUG", print(json.filename))
-#writeLines(toJSON(sla.list, pretty=TRUE), json.filename)
 writeLines(toJSON(json.list, pretty=TRUE), json.filename)
 
 res <- rciop.publish(json.filename, FALSE, FALSE)
