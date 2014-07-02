@@ -56,7 +56,8 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
   
   r.stack <- c()
   idx <- c()
-
+  json.list <- c()
+  
   for (i in 1:length(coverages$online.resource)) {
   
     rciop.log("INFO", paste(i/length(coverages$online.resource)*100, "Processing date:",  format(as.Date(coverages$start[i]), format="%Y-%m"), sep=" "))
@@ -76,6 +77,8 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
     rciop.log("INFO", format(as.Date(coverages$start[i]), format="%Y-%m"))    
     # update the index
     idx <- c(idx, format(as.Date(coverages$start[i]), format="%Y-%m"))
+  
+    json.list <- c(json.list, list(iso=country.code, var="SLA", date=format(as.Date(coverages$start[i]), format="%Y-%m"), value=cellStats(r.mask, stat="mean")))
     
     # delete the WCS downloaded raster (the other raster are in memory)
     file.remove(r@file@name)
@@ -108,7 +111,8 @@ sla.list <- list(iso=country.code, sla=stack.mean)
 json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
 
 rciop.log("DEBUG", print(json.filename))
-writeLines(toJSON(sla.list, pretty=TRUE), json.filename)
+#writeLines(toJSON(sla.list, pretty=TRUE), json.filename)
+writeLines(toJSON(json.list, pretty=TRUE), json.filename)
 
 res <- rciop.publish(json.filename, FALSE, FALSE)
  
