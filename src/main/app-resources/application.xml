@@ -10,7 +10,6 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="${artifactId}">
         <parameter id="start.date">1993-01-01</parameter>
         <parameter id="end.date">2011-12-31</parameter>
         <parameter id="count">300</parameter>
-        <parameter id="geoserver">http://ows.eowb-cckp.terradue.int/geoserver/rest</parameter>
       </defaultParameters>
       <defaultJobconf>
           <property id="mapred.task.timeout">6000000</property>
@@ -23,7 +22,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="${artifactId}">
       <job id="wb-sea-level"/>
       <sources>
         <!--<source refid="file:urls">/tmp/inputs</source>-->
-        <source refid="string:list">PRT</source>
+        <source refid="string:list">PRT,BRA</source>
         <!--<source refid="cas:series">http://localhost/catalogue/sandbox/MER_RR__1P/description</source>-->
       </sources>
       <parameters>
