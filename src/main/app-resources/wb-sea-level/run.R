@@ -22,6 +22,7 @@ df.params$value[df.params$type == "time:end"] <- end.date
 # submit the query
 res <- Query(osd.url, response.type, df.params)
 
+# get the series to retrieve the variable name
 series <- xmlToDataFrame(nodes = getNodeSet(xmlParse(res), 
     "//dclite4g:Series"), stringsAsFactors = FALSE)
 
@@ -71,14 +72,14 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
   
   }
 
-
-json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
-
-writeLines(toJSON(json.list, pretty=TRUE), json.filename)
-
-res <- rciop.publish(json.filename, FALSE, FALSE)
- 
-if (res$exit.code==0) { published <- res$output }
-
-file.remove(json.filename)
+  # create the json file
+  json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
+  writeLines(toJSON(json.list, pretty=TRUE), json.filename)
+  
+  # publish it
+  res <- rciop.publish(json.filename, FALSE, FALSE)
+  if (res$exit.code==0) { published <- res$output }
+  
+  # clean up
+  file.remove(json.filename)
 }
