@@ -26,7 +26,7 @@ CreateGeoServerCoverage <- function(geoserver.access.point,
     abstract="This is the abstract",
     native.crs="EPSG:4326",
     srs="EPSG:4326",
-    enabled=TRUE, 
+    enabled="true", 
     native.bbox,
     latlon.bbox) {
 
@@ -34,19 +34,20 @@ CreateGeoServerCoverage <- function(geoserver.access.point,
                     "workspaces", workspace, 
                     "coveragestores", coveragestore, 
                     "coverages", sep="/")
-
+  print(access.point)
   content.type <- "application/json"
   
-  content <- list(coverage=list(name=name, 
+  content <- toJSON(list(coverage=list(name=name, 
     title=title,
     abstract=abstract,
     nativeCRS=native.crs,
     srs=srs,
-    enabled=enabled,
-    nativeBoundingBox=native.bbox,
-    latLonBoundingBox=latlon.bbox
-  ))
-  
+    enabled=enabled)))
+#,
+#    nativeBoundingBox=native.bbox,
+#    latLonBoundingBox=latlon.bbox
+#  )))
+ content 
   # todo: check if workspace exists, if not create it
 
   return(POSTRequest(access.point, content.type, content))

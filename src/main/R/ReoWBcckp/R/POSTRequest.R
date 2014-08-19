@@ -8,7 +8,7 @@ POSTRequest <- function(access.point, content.type, content) {
   
   data <- curlPerform(url = access.point,
     postfields = content,
-    userpwd = "admin:geoserver",
+    userpwd = geoserver.authn,
     httpheader = myheader,
     verbose = FALSE,
     ssl.verifypeer = FALSE,

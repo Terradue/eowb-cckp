@@ -5,7 +5,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="${artifactId}">
     <jobTemplate id="wb-sea-level">
       <streamingExecutable>/application/wb-sea-level/run.R</streamingExecutable>
       <defaultParameters>
-        <parameter id="catalogue">http://catalogue.eowb-cckp.terradue.int/catalogue/search/SeaLevel-ECV/description</parameter>
+        <parameter id="catalogue">http://catalogue.eowb-cckp.terradue.int/catalogue/search/SeaLevelECV11/description</parameter>
         <parameter id="response.type">application/rdf+xml</parameter>-->
         <parameter id="start.date">1993-01-01</parameter>
         <parameter id="end.date">2011-12-31</parameter>

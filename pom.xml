@@ -22,6 +22,9 @@
 		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.deploy.skip>true</maven.deploy.skip>
+		<github.global.server>github</github.global.server>
+		<github.site.repositoryName>eowb-cckp</github.site.repositoryName>
+		<github.site.repositoryOwner>Terradue</github.site.repositoryOwner>
 	</properties>
 
 	<repositories>
@@ -108,6 +111,23 @@
 							</resources>
 						</configuration>
 					</execution>
+						<execution>
+						<id>copy-doc-src</id>
+						<!-- here the phase you need -->
+<phase>pre-site</phase>
+<goals>
+<goal>copy-resources</goal>
+</goals>
+<configuration>
+<outputDirectory>${project.build.directory}/R/src/doc</outputDirectory>
+<resources>
+<resource>
+<directory>${basedir}/src/main/doc</directory>
+<filtering>false</filtering>
+</resource>
+</resources>
+</configuration>
+</execution>
 				</executions>
 			</plugin>
 
@@ -184,6 +204,21 @@
 							</arguments>
 						</configuration>
 					</execution>
+					<execution>
+						<id>rgitbook</id>
+						<phase>site</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>R</executable>
+							<arguments>
+								<argument>-e</argument>
+								<argument><![CDATA[library(Rgitbook); buildGitbook(source.dir='${project.build.directory}/R/src/doc', out.dir='${project.build.directory}/R/doc');]]></argument>
+							</arguments>
+						</configuration>
+					</execution>
+
 				</executions>
 			</plugin>
 
@@ -344,13 +379,59 @@
 						<configuration>
 							<releaseName>v${project.version}</releaseName>
 							<tag>v${project.version}</tag>
-							<artifact>${project.build.directory}/R/src/ReoWBcckp_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tar.gz</artifact>
+							<artifact>${project.build.directory}/R/src/rOpenSearch_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tar.gz</artifact>
 							<overwriteArtifact>true</overwriteArtifact>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.8</version>
+				<configuration>
+					<message>Creating site for ${project.version}</message>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site-deploy</phase>
+						<configuration>
+							<outputDirectory>${project.build.directory}/R/doc</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.9</version>
+				<configuration>
+					<message>Creating site for ${project.version}</message>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site-deploy</phase>
+						<configuration>
+							<outputDirectory>${project.build.directory}/R/doc</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<skip>true</skip>
+					<skipDeploy>true</skipDeploy>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

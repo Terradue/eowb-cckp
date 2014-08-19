@@ -7,3 +7,6 @@ Read-and-delete-me
 =======
 _book
 *.html
+
+/src/main/doc/.rmdbuild
+.RData
