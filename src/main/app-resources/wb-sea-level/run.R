@@ -64,7 +64,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
     # clip with the country EEZ
     r.mask <- mask(r.shift, GetCountryEEZ(country.code))
   
-    json.list <- c(json.list, list(list(iso=country.code, var=series[1,"identifier"], date=format(as.Date(coverages$start[i]), format="%Y-%m"), value=cellStats(r.mask, stat="mean"))))
+    json.list <- c(json.list, list(list(iso=country.code, var=series[1,"identifier"], time=paste(format(as.Date(coverages$start[i]), format="%Y-%m"), "15", sep="-"), value=cellStats(r.mask, stat="mean"))))
     
     # delete the WCS downloaded raster (the other raster are in memory)
     file.remove(r@file@name)
@@ -76,7 +76,7 @@ json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
 
 writeLines(toJSON(json.list, pretty=TRUE), json.filename)
 
-res <- rciop.publish(json.filename, FALSE, FALSE)
+res <- rciop.publish(json.filename, metalink=TRUE, recursive=FALSE)
  
 if (res$exit.code==0) { published <- res$output }
 
