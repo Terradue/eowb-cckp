@@ -16,13 +16,13 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="${artifactId}">
       </defaultJobconf>
     </jobTemplate>
   </jobTemplates>
-  <workflow id="myworkflow" title="My workflow" abstract="This is my wrokflow">
+  <workflow id="myworkflow" title="My workflow" abstract="This is my workflow">
     <workflowVersion>1.0</workflowVersion>
     <node id="n-wb-sea-level">
       <job id="wb-sea-level"/>
       <sources>
         <!--<source refid="file:urls">/tmp/inputs</source>-->
-        <source refid="string:list">PRT,BRA</source>
+        <source refid="string:list">PRT</source>
         <!--<source refid="cas:series">http://localhost/catalogue/sandbox/MER_RR__1P/description</source>-->
       </sources>
       <parameters>

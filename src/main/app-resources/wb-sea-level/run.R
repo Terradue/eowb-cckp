@@ -22,6 +22,7 @@ df.params$value[df.params$type == "time:end"] <- end.date
 # submit the query
 res <- Query(osd.url, response.type, df.params)
 
+# get the series to retrieve the variable name
 series <- xmlToDataFrame(nodes = getNodeSet(xmlParse(res), 
     "//dclite4g:Series"), stringsAsFactors = FALSE)
 
@@ -81,4 +82,5 @@ res <- rciop.publish(json.filename, metalink=TRUE, recursive=FALSE)
 if (res$exit.code==0) { published <- res$output }
 
 file.remove(json.filename)
+
 }
