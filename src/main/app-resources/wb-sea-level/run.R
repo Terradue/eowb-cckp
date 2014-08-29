@@ -74,7 +74,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
 
 json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
 
-writeLines(toJSON(json.list, pretty=TRUE), json.filename)
+writeLines(toJSON(list(items=json.list), pretty=TRUE), json.filename)
 
 res <- rciop.publish(json.filename, metalink=TRUE, recursive=FALSE)
  
