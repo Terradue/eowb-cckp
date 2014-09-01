@@ -1,3 +1,13 @@
+#' A function to POST content to an access point
+#'
+#' @return a list with three elements: status, statusMessage and Location
+#' @keywords utilities
+#' @examples \dontrun{
+#' POSTRequest(access.point=data.api, content=toJSON(list(items=json.list)), content.type="application/json")
+#' }
+#'
+#' @export
+#' @import rCurl
 
 POSTRequest <- function(access.point, content.type, content) {
   
