@@ -5,10 +5,9 @@ POSTRequest <- function(access.point, content.type, content) {
   
   reader = basicTextGatherer()
   header = basicTextGatherer()
-  
+  # removed userpwd = geoserver.authn,
   data <- curlPerform(url = access.point,
     postfields = content,
-    userpwd = geoserver.authn,
     httpheader = myheader,
     verbose = FALSE,
     ssl.verifypeer = FALSE,
