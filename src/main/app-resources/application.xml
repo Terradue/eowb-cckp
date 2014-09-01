@@ -6,7 +6,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="${artifactId}">
       <streamingExecutable>/application/wb-sea-level/run.R</streamingExecutable>
       <defaultParameters>
         <parameter id="catalogue">http://catalogue.eowb-cckp.terradue.int/catalogue/search/SeaLevelECV11/description</parameter>
-        <parameter id="response.type">application/rdf+xml</parameter>-->
+        <parameter id="response.type">application/rdf+xml</parameter>
         <parameter id="start.date">1993-01-01</parameter>
         <parameter id="end.date">2011-12-31</parameter>
         <parameter id="count">300</parameter>
@@ -21,13 +21,9 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="${artifactId}">
     <node id="n-wb-sea-level">
       <job id="wb-sea-level"/>
       <sources>
-        <!--<source refid="file:urls">/tmp/inputs</source>-->
-        <source refid="string:list">PRT</source>
-        <!--<source refid="cas:series">http://localhost/catalogue/sandbox/MER_RR__1P/description</source>-->
+        <source scope="runtime" id="ISO3166-1-alpha-3" title="ISO 3166-1 alpha-3" abstract="ISO 3166-1 is part of the ISO 3166 standard published by the International Organization for Standardization (ISO), and defines codes for the names of countries, dependent territories, and special areas of geographical interest."  refid="string:list">CHL,ARG,CRI</source>
       </sources>
-      <parameters>
-        <!--<parameter id="param1">value3</parameter>-->
-      </parameters>
+      <parameters/>
     </node>
   </workflow>
 </application>

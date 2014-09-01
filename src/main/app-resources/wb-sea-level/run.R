@@ -1,10 +1,37 @@
 #!/usr/bin/Rscript --vanilla --slave --quiet
- 
+
 library("rciop")
 library("raster")
 library("rOpenSearch")
 
 library("ReoWBcckp", lib.loc="/application/share/R/library/")
+
+
+POSTRequest <- function(access.point, content.type, content) {
+  
+  myheader=c(Connection='close', 'Content-Type' = content.type)
+  
+  reader = basicTextGatherer()
+  header = basicTextGatherer()
+  
+  data <- curlPerform(url = access.point,
+    postfields = content,
+    httpheader = myheader,
+    verbose = FALSE,
+    ssl.verifypeer = FALSE,
+    writefunction = reader$update,
+    headerfunction = header$update
+  )
+  
+  h = parseHTTPHeader( header$value() )
+  
+  return(list(status=capture.output(cat(h["status"])),
+              message=capture.output(cat(h["statusMessage"])),
+              location=capture.output(cat(h["Location"]))
+              )
+          )
+  
+}
 
 osd.url <- rciop.getparam("catalogue")
 start.date <- rciop.getparam("start.date")
@@ -82,5 +109,8 @@ res <- rciop.publish(json.filename, metalink=TRUE, recursive=FALSE)
 if (res$exit.code==0) { published <- res$output }
 
 file.remove(json.filename)
+
+  # post json to datastore
+  POSTRequest(access.point="http://data.terradue.com/ec/catalogue/wb-eo/cci-v1" , content=toJSON(list(items=json.list)), content.type="application/json")
 
 }
