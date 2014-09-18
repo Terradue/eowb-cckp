@@ -44,12 +44,23 @@ wcs.template$value[wcs.template$param == "format"] <- "NetCDF3"
 f <- file("stdin")
 open(f)
 
+basePolygon <- readWKT("POLYGON((-180 -90, -180 90, 0 90, 0 -90,-180 -90))")
+
 while(length(country.code <- readLines(f, n=1)) > 0) {
   
   rciop.log("DEBUG", paste("Country ISO code:", country.code, sep=" "))
   
   # complete the WCS request with the country envelope (MBR) 
   wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelope(country.code)
+  
+  # issue on georef for countries with longitudes<0
+  coordinates <- unlist(strsplit(wcs.template$value[wcs.template$param == "bbox"], ","))
+  country.polygon <- paste("POLYGON((",   coordinates[1], coordinates[2], ",", coordinates[1], coordinates[4], ",",
+                                          coordinates[3], coordinates[4], ",", coordinates[3], coordinates[2], ",",
+                                          coordinates[1], coordinates[2], "))" )
+  x.shift <- 0
+  if(gContains(basePolygon, readWKT(country.polygon)))
+       x.shift <- -360
   
   json.list <- c()
   
@@ -59,9 +70,8 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
   
     # get the coverage 
     r <- GetWCSCoverage(coverages$online.resource[i], wcs.template, by.ref=FALSE)
-    
-    # issue on georef for contries with longitudes<0
-    r.shift <- shift(r, x=-360,y=0)
+   
+    r.shift <- shift(r, x= x.shift, y=0)
     
     # clip with the country EEZ
     r.mask <- mask(r.shift, GetCountryEEZ(country.code))

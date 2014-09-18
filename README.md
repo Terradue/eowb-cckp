@@ -60,19 +60,29 @@ coverages <- c(
 
 r.stack <- c()
 
-for (coverage in coverages) {
+# issue on georef for countries with longitudes<0
+basePolygon <- readWKT("POLYGON((-180 -90, -180 90, 0 90, 0 -90,-180 -90))")
+coordinates <- unlist(strsplit(wcs.template$value[wcs.template$param == "bbox"], ","))
+country.polygon <- paste("POLYGON((",   coordinates[1], coordinates[2], ",", coordinates[1], coordinates[4],",",
+                                        coordinates[3], coordinates[4], ",", coordinates[3],coordinates[2],",",
+                                        coordinates[1], coordinates[2],"))")
 
-  # get the coverage by value (a netcdf)  
-  r <- GetWCSCoverage(coverage, wcs.template, by.ref=FALSE)
-  
-  # shift the raster 
-  r.shift <- shift(r, x=-360,y=0)
-  
-  # extract the values for the EEZ
-  r.mask <- mask(r.shift, GetCountryEEZ(country.code))
-  
-  # add the clipped raster to the stack
-  r.stack <- c(r.stack, r.mask)
+x.shift <- 0
+if(gContains(basePolygon, readWKT(country.polygon)))
+     x.shift <- -360
+
+for (coverage in coverages) {
+     
+     # get the coverage by value (a netcdf)  
+     r <- GetWCSCoverage(coverage, wcs.template, by.ref=FALSE)
+          
+     r.shift <- shift(r, x=x.shift,y=0)
+          
+     # extract the values for the EEZ
+     r.mask <- mask(r.shift, GetCountryEEZ(country.code))
+     
+     # add the clipped raster to the stack
+     r.stack <- c(r.stack, r.mask)
 }
 
 # visualize with rasterVis package
