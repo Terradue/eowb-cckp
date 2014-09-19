@@ -5,7 +5,7 @@
 
 	<groupId>com.terradue.ciop.app</groupId>
 	<artifactId>eowb-cckp</artifactId>
-	<packaging>rpm</packaging>
+	<packaging>pom</packaging>
 	<name>eowb-cckp</name>
 	<description>eowb-cckp</description>
 	<version>0.1-SNAPSHOT</version>
