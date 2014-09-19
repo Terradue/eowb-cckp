@@ -4,7 +4,7 @@ library("rciop")
 library("raster")
 library("rOpenSearch")
 library("rgeos")
-library("RCurl")
+#library("RCurl")
 library("ReoWBcckp", lib.loc="/application/share/R/library/")
 
 osd.url <- rciop.getparam("catalogue")
