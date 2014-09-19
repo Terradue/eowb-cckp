@@ -7,7 +7,7 @@
 #' }
 #'
 #' @export
-#' @import rCurl
+#' @import RCurl
 
 POSTRequest <- function(access.point, content.type, content) {
   
