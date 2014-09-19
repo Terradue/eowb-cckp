@@ -3,7 +3,7 @@
 library("rciop")
 library("raster")
 library("rOpenSearch")
-
+library("rgeos")
 library("ReoWBcckp", lib.loc="/application/share/R/library/")
 
 osd.url <- rciop.getparam("catalogue")
