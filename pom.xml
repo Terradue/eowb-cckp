@@ -111,23 +111,23 @@
 							</resources>
 						</configuration>
 					</execution>
-						<execution>
+					<execution>
 						<id>copy-doc-src</id>
 						<!-- here the phase you need -->
-<phase>pre-site</phase>
-<goals>
-<goal>copy-resources</goal>
-</goals>
-<configuration>
-<outputDirectory>${project.build.directory}/R/src/doc</outputDirectory>
-<resources>
-<resource>
-<directory>${basedir}/src/main/doc</directory>
-<filtering>false</filtering>
-</resource>
-</resources>
-</configuration>
-</execution>
+						<phase>pre-site</phase>
+							<goals>
+								<goal>copy-resources</goal>
+							</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/R/src/doc</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/src/main/doc</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 
@@ -407,7 +407,7 @@
 			<plugin>
 				<groupId>com.github.github</groupId>
 				<artifactId>site-maven-plugin</artifactId>
-				<version>0.9</version>
+				<version>0.10-SNAPSHOT</version>
 				<configuration>
 					<message>Creating site for ${project.version}</message>
 				</configuration>
