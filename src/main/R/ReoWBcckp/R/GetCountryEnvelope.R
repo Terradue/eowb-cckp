@@ -11,7 +11,7 @@
 #' @export
 #' @import rgeos
 
-myGetCountryEnvelope <- function(ISO.Code) {
+GetCountryEnvelope <- function(ISO.Code) {
 
   #if (IsISOCodeInvalid(ISO.Code)) { stop(paste(ISO.Code, "is not valid", sep=" ")) }
   if (IsISOCodeInvalid(ISO.Code)) { 
