@@ -16,7 +16,7 @@ GetCountryEnvelope <- function(ISO.Code) {
   if (IsISOCodeInvalid(ISO.Code)) { stop(paste(ISO.Code, "is not valid", sep=" ")) }
   
   temp <- try(world_EEZ_V8_2014[world_EEZ_V8_2014$ISO_3digit == toupper(ISO.Code),], silent = TRUE)
-  if (class(temp) == "try-error") { 
+  if (class(temp) == "try-error")  
        stop(paste("No bounding box associated to", ISO.Code)) 
   
   bbox <- gEnvelope(temp)@bbox
