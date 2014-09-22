@@ -52,7 +52,14 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
   
   # complete the WCS request with the country envelope (MBR) 
   wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelope(country.code)
-   
+  
+  # the country.code 
+  if(is.na(wcs.template$value[wcs.template$param == "bbox"])){
+       rciop.log("DEBUG", paste("Country ISO code:", country.code, "wrong or no bbox associated to the Country ISO code",sep=" "))
+       next;
+  }
+       
+  
   # issue on georef for countries with longitudes<0
   coordinates <- unlist(strsplit(wcs.template$value[wcs.template$param == "bbox"], ","))
   country.polygon <- paste("POLYGON((",   coordinates[1], coordinates[2], ",", coordinates[1], coordinates[4], ",",
@@ -74,7 +81,12 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
     r.shift <- shift(r, x= x.shift, y=0)
     
     # clip with the country EEZ
-    r.mask <- mask(r.shift, GetCountryEEZ(country.code))
+    eez.country <- GetCountryEEZ(country.code)
+    if(is.na(eez.country)){
+        rciop.log("DEBUG", paste("Country ISO code:", country.code, "wrong or no bbox associated to the Country ISO code",sep=" "))
+        next;
+    }
+    r.mask <- mask(r.shift, eez.country )
   
     json.list <- c(json.list, list(list(iso=country.code, var=series[1,"identifier"], time=paste(format(as.Date(coverages$start[i]), format="%Y-%m"), "15", sep="-"), value=cellStats(r.mask, stat="mean"))))
     

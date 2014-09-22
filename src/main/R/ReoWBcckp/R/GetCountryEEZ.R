@@ -13,11 +13,17 @@
 
 GetCountryEEZ <- function(ISO.Code) {
 
-  if (IsISOCodeInvalid(ISO.Code)) { stop(paste(ISO.Code, "is not valid", sep=" ")) }
+  #if (IsISOCodeInvalid(ISO.Code)) { stop(paste(ISO.Code, "is not valid", sep=" ")) }
+  if (IsISOCodeInvalid(ISO.Code)) { 
+       print(paste(ISO.Code, "is not valid", sep=" ")) 
+       return (NA)
+  }
   
   result <- try(SpatialPolygons(world_EEZ_V8_2014[world_EEZ_V8_2014$ISO_3digit == toupper(ISO.Code),]@polygons), silent = TRUE)
-  if (class(result) == "try-error") 
-       stop(paste("No EEZ associated to", ISO.Code)) 
+  if (class(result) == "try-error"){
+       print(paste("No EEZ associated to", ISO.Code)) 
+       return (NA)
+  }
   
   return(result)
   
