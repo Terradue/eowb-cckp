@@ -11,7 +11,7 @@
 #' @export
 #' @import rgeos
 
-GetCountryEnvelope <- function(ISO.Code) {
+myGetCountryEnvelope <- function(ISO.Code) {
 
   #if (IsISOCodeInvalid(ISO.Code)) { stop(paste(ISO.Code, "is not valid", sep=" ")) }
   if (IsISOCodeInvalid(ISO.Code)) { 
@@ -27,6 +27,4 @@ GetCountryEnvelope <- function(ISO.Code) {
     
   bbox <- gEnvelope(temp)@bbox
   print(paste(bbox[1,1], bbox[2,1], bbox[1,2], bbox[2,2], sep=","))     
-  
-  return(bbox) 
 }
