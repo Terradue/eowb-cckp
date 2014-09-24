@@ -81,3 +81,9 @@ NULL
 #' @docType data
 #' @keywords datasets
 NULL
+
+#' Worldwide Country codes list
+#' @name ISO_3166_1
+#' @docType data
+#' @keywords datasets
+NULL

@@ -8,13 +8,12 @@
 #'}
 #'
 #' @export
-#' @import ISOcodes
 
 IsISOCodeInvalid <- function(ISO.code){
-  
+
   # load ISO-3166_1 in the workspace only if not present
-  if(!("ISO_3166_1"%in%ls())
-    data("ISO_3166_1")
+  #if(!("ISO_3166_1"%in%ls())
+  #  data("ISO_3166_1")
 
   codes <- c(NoAm_country,SoAm_country,Oceana_country,Africa_country,Asia_country,Eur_country)
   
