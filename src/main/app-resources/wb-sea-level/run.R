@@ -48,6 +48,11 @@ basePolygon <- readWKT("POLYGON((-180 -90, -180 90, 0 90, 0 -90,-180 -90))")
 
 while(length(country.code <- readLines(f, n=1)) > 0) {
   
+  if(!IsISOCodeInvalid(country.code)){
+       rciop.log("DEBUG", paste("Country ISO code:", country.code, "is not valid",sep=" "))
+       next;
+  }
+  
   rciop.log("DEBUG", paste("Country ISO code:", country.code, sep=" "))
   
   # complete the WCS request with the country envelope (MBR) 
