@@ -5,9 +5,7 @@ library("raster")
 library("rOpenSearch")
 library("rgeos")
 library("ReoWBcckp", lib.loc="/application/share/R/library/")
-library("ISOcodes")
 
-data("ISO_3166_1")
 osd.url <- rciop.getparam("catalogue")
 start.date <- rciop.getparam("start.date")
 end.date <- rciop.getparam("end.date")
@@ -50,7 +48,7 @@ basePolygon <- readWKT("POLYGON((-180 -90, -180 90, 0 90, 0 -90,-180 -90))")
 
 while(length(country.code <- readLines(f, n=1)) > 0) {
   
-  if(!toupper(ISO.code)%in%ISO_3166_1$Alpha_3){
+  if(IsISOCodeInvalid(country.code)){
        rciop.log("DEBUG", paste("Country ISO code:", country.code, "is not valid",sep=" "))
        next;
   }
