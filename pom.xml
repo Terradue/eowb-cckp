@@ -25,6 +25,7 @@
 		<github.global.server>github</github.global.server>
 		<github.site.repositoryName>eowb-cckp</github.site.repositoryName>
 		<github.site.repositoryOwner>Terradue</github.site.repositoryOwner>
+      <dcs.app.id></dcs.app.id>
 	</properties>
 
 	<repositories>
@@ -240,7 +241,7 @@
 							<outputDirectory>/application</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${basedir}/src/main/app-resources</directory>
+									<directory>${basedir}/src/main/app-resources/${dcs.app.id}</directory>
 								</resource>
 							</resources>
 						</configuration>
@@ -270,7 +271,7 @@
 							<directory>/application</directory>
 							<sources>
 								<source>
-									<location>${basedir}/src/main/app-resources</location>
+									<location>${basedir}/src/main/app-resources/${dcs.app.id}</location>
 								</source>
 							</sources>
 						</mapping>
@@ -286,7 +287,7 @@
 							<directory>/application</directory>
 							<sources>
 								<source>
-									<location>${basedir}/src/main/app-resources</location>
+									<location>${basedir}/src/main/app-resources/${dcs.app.id}</location>
 									<includes>
 										<include>**/run</include>
 										<include>**/run.R</include>
@@ -369,7 +370,7 @@
 						<configuration>
 							<releaseName>v${project.version}</releaseName>
 							<tag>v${project.version}</tag>
-							<artifact>${project.build.directory}/rpm/${project.artifactId}/RPMS/noarch/${project.artifactId}-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}-ciop.noarch.rpm</artifact>
+							<artifact>${project.build.directory}/rpm/${project.artifactId}/RPMS/noarch/${project.artifactId}-${dcs.app.id}-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}-ciop.noarch.rpm</artifact>
 							<overwriteArtifact>true</overwriteArtifact>
 						</configuration>
 					</execution>
@@ -383,7 +384,7 @@
 						<configuration>
 							<releaseName>v${project.version}</releaseName>
 							<tag>v${project.version}</tag>
-							<artifact>${project.build.directory}/R/src/rOpenSearch_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tar.gz</artifact>
+							<artifact>${project.build.directory}/R/src/ReoWBcckp_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tar.gz</artifact>
 							<overwriteArtifact>true</overwriteArtifact>
 						</configuration>
 					</execution>
@@ -440,5 +441,3 @@
 	</build>
 
 </project>
-
-
