@@ -358,7 +358,7 @@
 			<plugin>
 				<groupId>de.jutzig</groupId>
 				<artifactId>github-release-plugin</artifactId>
-				<version>1.0.3</version>
+				<version>1.1.1-dns</version>
 				<executions>
 					<execution>
 						<id>github-upload</id>
@@ -412,7 +412,7 @@
 			<plugin>
 				<groupId>com.github.github</groupId>
 				<artifactId>site-maven-plugin</artifactId>
-				<version>0.10-SNAPSHOT</version>
+				<version>0.10</version>
 				<configuration>
 					<message>Creating site for ${project.version}</message>
 				</configuration>
