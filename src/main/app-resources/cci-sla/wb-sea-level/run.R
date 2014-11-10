@@ -56,7 +56,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
   rciop.log("DEBUG", paste("Country ISO code:", country.code, sep=" "))
   
   # complete the WCS request with the country envelope (MBR) 
-  wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelope(country.code)
+  wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelopeEEZ(country.code)
   
   # the country.code 
   if(is.na(wcs.template$value[wcs.template$param == "bbox"])){

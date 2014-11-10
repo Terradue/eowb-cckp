@@ -40,7 +40,7 @@ wcs.template$value[wcs.template$param == "coverage"] <- "sla"
 wcs.template$value[wcs.template$param == "format"] <- "NetCDF3"
 
 # Get Portugal's minimum bounding box for the WCS request
-wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelope(country.code)
+wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelopeEEZ(country.code)
 
 # the list of WCS access points for 2010
 coverages <- c(
@@ -146,7 +146,7 @@ wcs.template$value[wcs.template$param == "request"] <- "GetCoverage"
 wcs.template$value[wcs.template$param == "coverage"] <- "sla"
 wcs.template$value[wcs.template$param == "format"] <- "NetCDF3"
 
-wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelope(country.code)
+wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelopeEEZ(country.code)
 
 
 r.stack <- c()
