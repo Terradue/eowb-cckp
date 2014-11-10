@@ -258,7 +258,7 @@
 					<distribution>Terradue ${project.inceptionYear}</distribution>
 					<group>air</group>
 					<packager>Terradue</packager>
-					<name>${project.artifactId}</name>
+					<name>${project.artifactId}-${dcs.app.id}</name>
 					<defaultDirmode>775</defaultDirmode>
 					<defaultFilemode>664</defaultFilemode>
 					<defaultUsername>root</defaultUsername>
@@ -302,7 +302,7 @@
 					</mappings>
 
 					<provides>
-						<provide>${project.artifactId}</provide>
+						<provide>${project.artifactId}-${dcs.app.id}</provide>
 					</provides>
 					<needarch>noarch</needarch>
 				</configuration>
