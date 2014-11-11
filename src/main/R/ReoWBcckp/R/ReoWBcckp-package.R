@@ -1,3 +1,8 @@
+#' This dataset represents the countries polygon(s)
+#' @name WB_cntry_cleaned 
+#' @docType data
+#' @keywords datasets
+NULL
 #' This dataset represents Exclusive Economic Zones (EEZ) of the world
 #' @name world_EEZ_V8_2014 
 #' @docType data
