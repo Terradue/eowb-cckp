@@ -18,7 +18,9 @@ GetCountryEnvelope <- function(ISO.Code) {
       return (NA)
   }
      
-  temp <- try(WB_cntry_cleaned[WB_cntry_cleaned$ISO_3DIGIT == toupper(ISO.Code),], silent = TRUE)
+  # because the dataframe as some NA values, i need to subset avoiding it
+  temp <- try(subset(WB_cntry_cleaned, WB_cntry_cleaned$ISO_3DIGIT==toupper(ISO.Code)), silent = TRUE)
+  #temp <- try(WB_cntry_cleaned[WB_cntry_cleaned$ISO_3DIGIT == toupper(ISO.Code),], silent = TRUE)
   if (class(temp) == "try-error") {
        print(paste("No bounding box associated to", ISO.Code)) 
        return (NA)

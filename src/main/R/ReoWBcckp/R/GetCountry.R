@@ -17,8 +17,10 @@ GetCountry <- function(ISO.Code) {
        print(paste(ISO.Code, "is not valid", sep=" ")) 
        return (NA)
   }
-  
-  result <- try(SpatialPolygons(WB_cntry_cleaned[WB_cntry_cleaned$ISO_3digit == toupper(ISO.Code),]@polygons), silent = TRUE)
+   
+  # because the dataframe as some NA values, i need to subset avoiding it
+  result <- try(SpatialPolygons(subset(WB_cntry_cleaned, WB_cntry_cleaned$ISO_3DIGIT==toupper(ISO.Code))@polygons), silent = TRUE)
+  #result <- try(SpatialPolygons(WB_cntry_cleaned[WB_cntry_cleaned$ISO_3DIGIT == toupper(ISO.Code),]@polygons), silent = TRUE)
   if (class(result) == "try-error"){
        print(paste("Error rised for the", ISO.Code, "code request")) 
        return (NA)
