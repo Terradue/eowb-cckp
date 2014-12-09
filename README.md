@@ -28,6 +28,8 @@ library("ReoWBcckp")
 
 # PRT is Portugal's ISO 3166-1 alpha-3 code
 country.code <- "PRT"
+# use EEZ or country frontier
+use.frontier <- FALSE
 
 # get the WCS GET request template
 wcs.template <- GetWCSTemplate()
@@ -39,8 +41,23 @@ wcs.template$value[wcs.template$param == "request"] <- "GetCoverage"
 wcs.template$value[wcs.template$param == "coverage"] <- "sla"
 wcs.template$value[wcs.template$param == "format"] <- "NetCDF3"
 
+c.extent <- extent(GetCountryEEZ(country.code))
+if(use.frontier){
+     c.extent <- extent(GetCountry(country.code))         
+}
+
+# check if the country is crossed by the greenwich meridian
+split.country <- FALSE  
+if(c.extent@xmin<0 & c.extent@xmax>0) {
+     split.country <- TRUE
+}
+
 # Get Portugal's minimum bounding box for the WCS request
-wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelopeEEZ(country.code)
+if(use.frontier){
+     wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelope(country.code)
+} else {
+     wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelopeEEZ(country.code)
+}
 
 # the list of WCS access points for 2010
 coverages <- c(
@@ -60,6 +77,9 @@ coverages <- c(
 
 r.stack <- c()
 
+country.frontier <- as(GetCountry(country.code),"SpatialLines")
+country.eez <- as(GetCountryEEZ(country.code),"SpatialLines")
+
 # issue on georef for countries with longitudes<0
 basePolygon <- readWKT("POLYGON((-180 -90, -180 90, 0 90, 0 -90,-180 -90))")
 coordinates <- unlist(strsplit(wcs.template$value[wcs.template$param == "bbox"], ","))
@@ -67,22 +87,88 @@ country.polygon <- paste("POLYGON((",   coordinates[1], coordinates[2], ",", coo
                                         coordinates[3], coordinates[4], ",", coordinates[3],coordinates[2],",",
                                         coordinates[1], coordinates[2],"))")
 
-x.shift <- 0
-if(gContains(basePolygon, readWKT(country.polygon)))
-     x.shift <- -360
 
-for (coverage in coverages) {
+
+if(split.country) {
      
-     # get the coverage by value (a netcdf)  
-     r <- GetWCSCoverage(coverage, wcs.template, by.ref=FALSE)
-          
-     r.shift <- shift(r, x=x.shift,y=0)
-          
-     # extract the values for the EEZ
-     r.mask <- mask(r.shift, GetCountryEEZ(country.code))
+     # the country crosses the Greenwich meridian, need to split the country in 2 parts, the est one and west one
      
-     # add the clipped raster to the stack
-     r.stack <- c(r.stack, r.mask)
+     wcs.template.west <- wcs.template
+     wcs.template.est <- wcs.template
+     wcs.template.west$value[wcs.template.west$param == "bbox"] <- paste(coordinates[1],coordinates[2],0,coordinates[4],sep=",")
+     wcs.template.est$value[wcs.template.est$param == "bbox"] <- paste(0,coordinates[2],coordinates[3],coordinates[4],sep=",")
+     
+     west.country.extent <- c.extent
+     est.country.extent <- c.extent
+     west.country.extent@xmax <- 0
+     est.country.extent@xmin <- 0
+
+     if(use.frontier){
+          country.west<-crop(GetCountry(country.code), west.country.extent)
+          country.est<-crop(GetCountry(country.code), est.country.extent)
+     } else {
+          country.west<-crop(GetCountryEEZ(country.code), west.country.extent)
+          country.est<-crop(GetCountryEEZ(country.code), est.country.extent)
+     }
+     
+     
+     for (coverage in coverages) {
+          # get the coverage by value (a netcdf)  
+          
+          # est part of the country
+          r.est <- GetWCSCoverage(coverage, wcs.template.est, by.ref=FALSE)
+          r.est.mask.shift <- mask(r.est , country.est)
+          
+          # west part of the country
+          r.west <- GetWCSCoverage(coverage, wcs.template.west, by.ref=FALSE)
+
+          # issue on georef for countries with longitudes<0
+          r.west.shift <- shift(r.west, x=-360,y=0)
+          r.west.mask.shift <- mask(r.west.shift, country.west)
+          
+          if(use.frontier) {
+               # put the 2 raster together 
+               r.mask <- merge(r.west.mask.shift, r.est.mask.shift, tolerance = 0.1, ext=c.extent)
+               # get data along the frontier
+               cr <- crop(r.mask, extent(country.frontier), snap="near")                    
+               fr <- rasterize(country.frontier, cr)   
+               lr <- mask(x=cr, mask=fr)     
+               r.stack <- c(r.stack, lr)
+          }else {
+               # extract the values for the country frontier
+               # put the 2 raster together 
+               r.mask <- merge(r.west.mask.shift, r.est.mask.shift, tolerance = 0.1, ext=c.extent)
+               # add the clipped raster to the stack
+               r.stack <- c(r.stack, r.mask)
+          }
+     }
+}else {
+     # country completly in the est or west part
+     x.shift <- 0
+     if(gContains(basePolygon, readWKT(country.polygon)))
+          x.shift <- -360
+     # issue on georef for countries with longitudes<0
+     
+     for (coverage in coverages) {
+          # get the coverage by value (a netcdf)  
+          r <- GetWCSCoverage(coverage, wcs.template, by.ref=FALSE)
+          r.shift <- shift(r, x=x.shift,y=0)
+          
+          if(usefrontier) {
+               r.mask <- mask(r.shift, GetCountry(country.code))              
+               # get data along the frontier
+               cr <- crop(r.mask, extent(country.frontier), snap="near")                    
+               fr <- rasterize(country.frontier, cr)   
+               lr <- mask(x=cr, mask=fr)     
+               r.stack <- c(r.stack, lr)
+          }else {
+               # extract the values for the EEZ
+               # put the 2 raster together 
+               r.mask <- mask(r.shift, GetCountryEEZ(country.code))
+               # add the clipped raster to the stack
+               r.stack <- c(r.stack, r.mask)
+          }
+     }
 }
 
 # visualize with rasterVis package
