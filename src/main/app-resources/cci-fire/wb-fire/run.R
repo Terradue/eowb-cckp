@@ -55,13 +55,6 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
 
   rciop.log("DEBUG", paste("Country ISO code:", country.code, sep=" "))
 
-  # clipping using the confines of the country
-  split.country <- FALSE
-  country.extent <- extent(GetCountry(country.code))
-  if(country.extent@xmin<0 & country.extent@xmax>0) {
-       split.country <- TRUE
-  }
-
   # complete the WCS request with the country envelope (MBR) 
   wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelope(country.code)
   
@@ -70,7 +63,13 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
        rciop.log("DEBUG", paste("Country ISO code:", country.code, "wrong or no bbox associated to the Country ISO code",sep=" "))
        next;
   }
-       
+
+  # clipping using the confines of the country
+  split.country <- FALSE
+  country.extent <- extent(GetCountry(country.code))
+  if(country.extent@xmin<0 & country.extent@xmax>0) {
+       split.country <- TRUE
+  }       
   
   # issue on georef for countries with longitudes<0
   coordinates <- unlist(strsplit(wcs.template$value[wcs.template$param == "bbox"], ","))

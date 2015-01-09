@@ -55,13 +55,6 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
 
   rciop.log("DEBUG", paste("Country ISO code:", country.code, sep=" "))
 
-  # clipping using the EEZ of the country
-  split.country <- FALSE
-  country.extent <- extent(GetCountryEEZ(country.code))
-  if(country.extent@xmin<0 & country.extent@xmax>0) {
-       split.country <- TRUE
-  }
-
   # complete the WCS request with the country envelope (MBR) 
   wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelopeEEZ(country.code)
   
@@ -71,7 +64,13 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
        next;
   }
        
-  
+  # clipping using the EEZ of the country
+  split.country <- FALSE
+  country.extent <- extent(GetCountryEEZ(country.code))
+  if(country.extent@xmin<0 & country.extent@xmax>0) {
+       split.country <- TRUE
+  }
+    
   # issue on georef for countries with longitudes<0
   coordinates <- unlist(strsplit(wcs.template$value[wcs.template$param == "bbox"], ","))
   country.polygon <- paste("POLYGON((",   coordinates[1], coordinates[2], ",", coordinates[1], coordinates[4], ",",
