@@ -1,0 +1,22 @@
+# Country Polygon(s)
+
+## What is 
+
+The data represent the country polygon(s)
+
+## Data format
+
+The data is provided as a Shapefile.
+
+## Data pre-processing
+
+The data was imported into R and saved as an R object to a file:
+
+```R
+library(rgdal)
+WB_cntry_cleaned <- readOGR("~/Downloads/Country/", "WB_cntry_cleaned")
+save(WB_cntry_cleaned, file="~/Downloads/WB_cntry_cleaned.rda")
+```
+
+The file WB_cntry_cleaned.rda was then pushed to https://github.com/Terradue/eowb-cckp/blob/master/src/main/R/ReoWBcckp/data/WB_cntry_cleaned.rda
+

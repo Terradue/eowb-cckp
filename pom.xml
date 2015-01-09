@@ -8,7 +8,7 @@
 	<packaging>rpm</packaging>
 	<name>eowb-cckp</name>
 	<description>eowb-cckp</description>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.2-SNAPSHOT</version>
 
 	<scm>
 		<connection>scm:git:git@github.com:Terradue/eowb-cckp.git</connection>
@@ -25,6 +25,7 @@
 		<github.global.server>github</github.global.server>
 		<github.site.repositoryName>eowb-cckp</github.site.repositoryName>
 		<github.site.repositoryOwner>Terradue</github.site.repositoryOwner>
+      <dcs.app.id></dcs.app.id>
 	</properties>
 
 	<repositories>
@@ -240,7 +241,7 @@
 							<outputDirectory>/application</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${basedir}/src/main/app-resources</directory>
+									<directory>${basedir}/src/main/app-resources/${dcs.app.id}</directory>
 								</resource>
 							</resources>
 						</configuration>
@@ -257,7 +258,7 @@
 					<distribution>Terradue ${project.inceptionYear}</distribution>
 					<group>air</group>
 					<packager>Terradue</packager>
-					<name>${project.artifactId}</name>
+					<name>${project.artifactId}-${dcs.app.id}</name>
 					<defaultDirmode>775</defaultDirmode>
 					<defaultFilemode>664</defaultFilemode>
 					<defaultUsername>root</defaultUsername>
@@ -270,7 +271,7 @@
 							<directory>/application</directory>
 							<sources>
 								<source>
-									<location>${basedir}/src/main/app-resources</location>
+									<location>${basedir}/src/main/app-resources/${dcs.app.id}</location>
 								</source>
 							</sources>
 						</mapping>
@@ -286,7 +287,7 @@
 							<directory>/application</directory>
 							<sources>
 								<source>
-									<location>${basedir}/src/main/app-resources</location>
+									<location>${basedir}/src/main/app-resources/${dcs.app.id}</location>
 									<includes>
 										<include>**/run</include>
 										<include>**/run.R</include>
@@ -301,7 +302,7 @@
 					</mappings>
 
 					<provides>
-						<provide>${project.artifactId}</provide>
+						<provide>${project.artifactId}-${dcs.app.id}</provide>
 					</provides>
 					<needarch>noarch</needarch>
 				</configuration>
@@ -357,7 +358,7 @@
 			<plugin>
 				<groupId>de.jutzig</groupId>
 				<artifactId>github-release-plugin</artifactId>
-				<version>1.0.3</version>
+				<version>1.1.1-dns</version>
 				<executions>
 					<execution>
 						<id>github-upload</id>
@@ -369,7 +370,7 @@
 						<configuration>
 							<releaseName>v${project.version}</releaseName>
 							<tag>v${project.version}</tag>
-							<artifact>${project.build.directory}/rpm/${project.artifactId}/RPMS/noarch/${project.artifactId}-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}-ciop.noarch.rpm</artifact>
+							<artifact>${project.build.directory}/rpm/${project.artifactId}/RPMS/noarch/${project.artifactId}-${dcs.app.id}-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}-ciop.noarch.rpm</artifact>
 							<overwriteArtifact>true</overwriteArtifact>
 						</configuration>
 					</execution>
@@ -383,7 +384,7 @@
 						<configuration>
 							<releaseName>v${project.version}</releaseName>
 							<tag>v${project.version}</tag>
-							<artifact>${project.build.directory}/R/src/rOpenSearch_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tar.gz</artifact>
+							<artifact>${project.build.directory}/R/src/ReoWBcckp_${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.tar.gz</artifact>
 							<overwriteArtifact>true</overwriteArtifact>
 						</configuration>
 					</execution>
@@ -411,7 +412,7 @@
 			<plugin>
 				<groupId>com.github.github</groupId>
 				<artifactId>site-maven-plugin</artifactId>
-				<version>0.10-SNAPSHOT</version>
+				<version>0.10</version>
 				<configuration>
 					<message>Creating site for ${project.version}</message>
 				</configuration>
@@ -440,5 +441,3 @@
 	</build>
 
 </project>
-
-

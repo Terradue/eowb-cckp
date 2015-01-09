@@ -52,9 +52,9 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
        rciop.log("DEBUG", paste("Country ISO code:", country.code, "is not valid",sep=" "))
        next;
   }
-  
+
   rciop.log("DEBUG", paste("Country ISO code:", country.code, sep=" "))
-  
+
   # complete the WCS request with the country envelope (MBR) 
   wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelope(country.code)
   
@@ -63,43 +63,83 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
        rciop.log("DEBUG", paste("Country ISO code:", country.code, "wrong or no bbox associated to the Country ISO code",sep=" "))
        next;
   }
-       
+
+  # clipping using the confines of the country
+  split.country <- FALSE
+  country.extent <- extent(GetCountry(country.code))
+  if(country.extent@xmin<0 & country.extent@xmax>0) {
+       split.country <- TRUE
+  }       
   
   # issue on georef for countries with longitudes<0
   coordinates <- unlist(strsplit(wcs.template$value[wcs.template$param == "bbox"], ","))
   country.polygon <- paste("POLYGON((",   coordinates[1], coordinates[2], ",", coordinates[1], coordinates[4], ",",
                                           coordinates[3], coordinates[4], ",", coordinates[3], coordinates[2], ",",
                                           coordinates[1], coordinates[2], "))" )
-  x.shift <- 0
-  if(gContains(basePolygon, readWKT(country.polygon)))
-       x.shift <- -360
-  
+   
+   # get the frontier as SpatialLines
+  frontier <- as(GetCountry(country.code),"SpatialLines")
+
   json.list <- c()
   
   for (i in 1:length(coverages$online.resource)) {
-  
+
     rciop.log("INFO", paste(i/length(coverages$online.resource)*100, "Processing date:",  format(as.Date(coverages$start[i]), format="%Y-%m"), sep=" "))
-  
+
     # get the coverage 
     r <- GetWCSCoverage(coverages$online.resource[i], wcs.template, by.ref=FALSE)
    
-    r.shift <- shift(r, x= x.shift, y=0)
+    if(split.country){
+
+      # the country crosses the Greenwich meridian, need to split the country in 2 parts, the est one and west one
+
+      # west part of the country
+      wcs.template.west <- wcs.template
+      #bbox: xmin,xmax,ymin,ymax
+      wcs.template.west$value[wcs.template.west$param == "bbox"] <- paste(coordinates[1],coordinates[2],0,coordinates[4],sep=",")
+      west.country.extent <- country.extent 
+      west.country.extent@xmax <- 0
+      country.west<-crop(GetCountry(country.code), west.country.extent)
+      r.west <- GetWCSCoverage(coverages$online.resource[i], wcs.template.west, by.ref=FALSE)
+      r.west.shift <- shift(r.west, x=-360,y=0)
+      r.west.mask.shift <- mask(r.west.shift, country.west)
+      
+      # est part of the country
+      wcs.template.est <- wcs.template
+      #bbox: xmin,xmax,ymin,ymax
+      wcs.template.est$value[wcs.template.est$param == "bbox"] <- paste(0,coordinates[2],coordinates[3],coordinates[4],sep=",")
+      est.country.extent <- country.extent 
+      est.country.extent@xmin <- 0
+      country.est<-crop(GetCountry(country.code), est.country.extent)
+      r.est <- GetWCSCoverage(coverages$online.resource[i], wcs.template.est, by.ref=FALSE)
+      r.est.mask.shift <- mask(r.est , country.est)
+            
+      # put the 2 raster together to get the complete country raster
+      r.mask <- merge(r.west.mask.shift, r.est.mask.shift, tolerance = 0.1, ext=country.extent)
+
+    } else {
+      # country completly in the est or west part
+      x.shift <- 0
+      if(gContains(basePolygon, readWKT(country.polygon)))
+           x.shift <- -360
+      
+      r.shift <- shift(r, x= x.shift, y=0)
     
-    # clip with the country EEZ
-    eez.country <- GetCountryEEZ(country.code)
-    if(is.na(eez.country)){
-        rciop.log("DEBUG", paste("Country ISO code:", country.code, "wrong or no bbox associated to the Country ISO code",sep=" "))
-        next;
+      # clip with the country confines
+      r.mask <- mask(r.shift, GetCountry(country.code) )
     }
-    r.mask <- mask(r.shift, eez.country )
-  
-    json.list <- c(json.list, list(list(iso=country.code, var=series[1,"identifier"], time=paste(format(as.Date(coverages$start[i]), format="%Y-%m"), "15", sep="-"), value=cellStats(r.mask, stat="mean"))))
+
+    # get data along the frontier
+    # see http://gis.stackexchange.com/questions/92221/extract-raster-from-raster-using-polygon-shapefile-in-r
+    cr <- crop(r.mask, extent(frontier), snap="near")                    
+    fr <- rasterize(frontier, cr)   
+    r.boundary <- mask(x=cr, mask=fr)
+
+    json.list <- c(json.list, list(list(iso=country.code, var=series[1,"identifier"], time=paste(format(as.Date(coverages$start[i]), format="%Y-%m"), "15", sep="-"), value=cellStats(r.boundary, stat="mean"))))
     
     # delete the WCS downloaded raster (the other raster are in memory)
     file.remove(r@file@name)
-  
   }
-
 
 json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
 
@@ -112,6 +152,6 @@ if (res$exit.code==0) { published <- res$output }
 file.remove(json.filename)
 
   # post json to datastore
-  POSTRequest(access.point=data.api, content=toJSON(list(items=json.list)), content.type="application/json")
+  #POSTRequest(access.point=data.api, content=toJSON(list(items=json.list)), content.type="application/json")
 
 }

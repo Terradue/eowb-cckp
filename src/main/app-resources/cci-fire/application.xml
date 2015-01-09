@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="${artifactId}">
+ <jobTemplates>
+    <jobTemplate id="wb-fire">
+      <streamingExecutable>/application/wb-fire/run.R</streamingExecutable>
+      <defaultParameters>
+        <parameter id="catalogue">http://catalogue.eowb-cckp.terradue.int/catalogue/search/FireECV15/description </parameter>
+        <parameter id="response.type">application/rdf+xml</parameter>
+        <parameter id="start.date">1993-01-01</parameter>
+        <parameter id="end.date">2011-12-31</parameter>
+        <parameter id="count">300</parameter>
+        <parameter id="data.api">http://data.terradue.com/ec/catalogue/wb-eo/cci-v1</parameter>
+      </defaultParameters>
+      <defaultJobconf>
+          <property id="mapred.task.timeout">6000000</property>
+      </defaultJobconf>
+    </jobTemplate>
+  </jobTemplates>
+  <workflow id="myworkflow" title="My workflow" abstract="This is my workflow">
+    <workflowVersion>1.0</workflowVersion>
+    <node id="n-wb-fire">
+      <job id="wb-fire"/>
+      <sources>
+        <source scope="runtime" id="ISO3166-1-alpha-3" title="ISO 3166-1 alpha-3" abstract="ISO 3166-1 is part of the ISO 3166 standard published by the International Organization for Standardization (ISO), and defines codes for the names of countries, dependent territories, and special areas of geographical interest."  refid="file:urls">/application/data/countries.txt</source>
+      </sources>
+      <parameters/>
+    </node>
+  </workflow>
+</application>

@@ -22,7 +22,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="${artifactId}">
     <node id="n-wb-sea-level">
       <job id="wb-sea-level"/>
       <sources>
-        <source scope="runtime" id="ISO3166-1-alpha-3" title="ISO 3166-1 alpha-3" abstract="ISO 3166-1 is part of the ISO 3166 standard published by the International Organization for Standardization (ISO), and defines codes for the names of countries, dependent territories, and special areas of geographical interest."  refid="string:list">CHL,ARG,CRI</source>
+        <source scope="runtime" id="ISO3166-1-alpha-3" title="ISO 3166-1 alpha-3" abstract="ISO 3166-1 is part of the ISO 3166 standard published by the International Organization for Standardization (ISO), and defines codes for the names of countries, dependent territories, and special areas of geographical interest."  refid="file:urls">/application/data/countries.txt</source>
       </sources>
       <parameters/>
     </node>
