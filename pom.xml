@@ -8,7 +8,7 @@
 	<packaging>rpm</packaging>
 	<name>eowb-cckp</name>
 	<description>eowb-cckp</description>
-	<version>0.2</version>
+	<version>0.3-SNAPSHOT</version>
 
 	<scm>
 		<connection>scm:git:git@github.com:Terradue/eowb-cckp.git</connection>
