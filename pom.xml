@@ -8,7 +8,7 @@
 	<packaging>rpm</packaging>
 	<name>eowb-cckp</name>
 	<description>eowb-cckp</description>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.2</version>
 
 	<scm>
 		<connection>scm:git:git@github.com:Terradue/eowb-cckp.git</connection>
@@ -258,7 +258,8 @@
 					<distribution>Terradue ${project.inceptionYear}</distribution>
 					<group>air</group>
 					<packager>Terradue</packager>
-					<name>${project.artifactId}-${dcs.app.id}</name>
+					<!-- set the rpm name. the rpm doesn't depend on the application-->
+					<name>${project.artifactId}</name>
 					<defaultDirmode>775</defaultDirmode>
 					<defaultFilemode>664</defaultFilemode>
 					<defaultUsername>root</defaultUsername>
@@ -370,7 +371,7 @@
 						<configuration>
 							<releaseName>v${project.version}</releaseName>
 							<tag>v${project.version}</tag>
-							<artifact>${project.build.directory}/rpm/${project.artifactId}/RPMS/noarch/${project.artifactId}-${dcs.app.id}-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}-ciop.noarch.rpm</artifact>
+							<artifact>${project.build.directory}/rpm/${project.artifactId}/RPMS/noarch/${project.artifactId}-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}-ciop.noarch.rpm</artifact>
 							<overwriteArtifact>true</overwriteArtifact>
 						</configuration>
 					</execution>

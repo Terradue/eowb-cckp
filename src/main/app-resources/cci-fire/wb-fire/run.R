@@ -95,28 +95,41 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
 
       # west part of the country
       wcs.template.west <- wcs.template
-      #bbox: xmin,xmax,ymin,ymax
-      wcs.template.west$value[wcs.template.west$param == "bbox"] <- paste(coordinates[1],coordinates[2],0,coordinates[4],sep=",")
+      #bbox: xmin,ymin,xmax,ymax
+      wcs.template.west$value[wcs.template.west$param == "bbox"] <- paste(as.numeric(coordinates[1]) + 360,coordinates[2],360,coordinates[4],sep=",")
       west.country.extent <- country.extent 
       west.country.extent@xmax <- 0
       country.west<-crop(GetCountry(country.code), west.country.extent)
       r.west <- GetWCSCoverage(coverages$online.resource[i], wcs.template.west, by.ref=FALSE)
       r.west.shift <- shift(r.west, x=-360,y=0)
       r.west.mask.shift <- mask(r.west.shift, country.west)
-      
+      west.values <- values(r.west.mask.shift)
+      west.notNA <- na.omit(west.values)
+
       # est part of the country
       wcs.template.est <- wcs.template
-      #bbox: xmin,xmax,ymin,ymax
+      #bbox: xmin,ymin,xmax,ymax
       wcs.template.est$value[wcs.template.est$param == "bbox"] <- paste(0,coordinates[2],coordinates[3],coordinates[4],sep=",")
       est.country.extent <- country.extent 
       est.country.extent@xmin <- 0
       country.est<-crop(GetCountry(country.code), est.country.extent)
       r.est <- GetWCSCoverage(coverages$online.resource[i], wcs.template.est, by.ref=FALSE)
       r.est.mask.shift <- mask(r.est , country.est)
-            
-      # put the 2 raster together to get the complete country raster
-      r.mask <- merge(r.west.mask.shift, r.est.mask.shift, tolerance = 0.1, ext=country.extent)
+      est.values <- values(r.est.mask.shift)
+      est.notNA <- na.omit(est.values)
 
+      # put the 2 raster together to get the complete country raster
+      r.mask <- raster()
+      if(length(est.notNA)>0 && length(west.notNA)>0){
+        r.mask <- merge(r.west.mask.shift, r.est.mask.shift, tolerance = 0.1, ext=country.extent)
+      }else{
+            if(length(west.notNA)>0){
+              r.mask <- r.west.mask.shift
+            }
+            if(length(est.notNA)>0){
+              r.mask <- r.est.mask.shift
+            }
+      }
     } else {
       # country completly in the est or west part
       x.shift <- 0
