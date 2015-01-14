@@ -43,7 +43,7 @@ wcs.template$value[wcs.template$param == "format"] <- "NetCDF3"
 # waiting time before retry
 wait.time <- 1
 # number of retry
-retrys <- 2
+retries <- 2
 
 # read the stdin into a file
 f <- file("stdin")
@@ -105,7 +105,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
       retry <- 0
       while(TRUE){
         # check exit from loop 
-        if(retry > retrys)
+        if(retry > retries)
           break;
 
         tryCatch({
@@ -143,7 +143,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
       retry <- 0
       while(TRUE){
         # check exit from loop 
-        if(retry > retrys)
+        if(retry > retries)
           break;
 
         tryCatch({
@@ -186,7 +186,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
       retry <- 0
       while(TRUE){
         # check exit from loop 
-        if(retry > retrys)
+        if(retry > retries)
           break;
 
         tryCatch({
