@@ -40,6 +40,11 @@ wcs.template$value[wcs.template$param == "request"] <- "GetCoverage"
 wcs.template$value[wcs.template$param == "coverage"] <- "sla"
 wcs.template$value[wcs.template$param == "format"] <- "NetCDF3"
 
+# waiting time before retry
+wait.time <- 1
+# number of retry
+retrys <- 2
+
 # read the stdin into a file
 f <- file("stdin")
 open(f)
@@ -85,10 +90,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
   for (i in 1:length(coverages$online.resource)) {
 
     rciop.log("INFO", paste(i/length(coverages$online.resource)*100, "Processing date:",  format(as.Date(coverages$start[i]), format="%Y-%m"), sep=" "))
-
-    # get the coverage 
-    r <- GetWCSCoverage(coverages$online.resource[i], wcs.template, by.ref=FALSE)
-   
+              
     if(split.country){
 
       # the country crosses the Greenwich meridian, need to split the country in 2 parts, the est one and west one
@@ -100,7 +102,32 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
       west.country.extent <- country.extent 
       west.country.extent@xmax <- 0
       country.west<-crop(GetCountry(country.code), west.country.extent)
-      r.west <- GetWCSCoverage(coverages$online.resource[i], wcs.template.west, by.ref=FALSE)
+
+      # get the west coverage 
+      done <- FALSE
+      retry <- 0
+      while(TRUE){
+        # check exit from loop 
+        if(retry > retrys)
+          break;
+
+        tryCatch({
+          r.west <-GetWCSCoverage(coverages$online.resource[i], wcs.template.west, by.ref=FALSE)
+          done <- TRUE
+          break;
+        },error=function(cond)
+        {
+          rciop.log("DEBUG", paste("Error:", cond, sep=" "))
+          rciop.log("DEBUG", paste("New try in", wait.time, "seconds", sep=" "))
+          Sys.sleep(wait.time)
+        })  
+        retry <- retry + 1
+      }
+      if (!done){
+        rciop.log("DEBUG", paste(country.code, "element not computed", sep=" "))
+        next;
+      }
+
       r.west.shift <- shift(r.west, x=-360,y=0)
       r.west.mask.shift <- mask(r.west.shift, country.west)
       west.values <- values(r.west.mask.shift)
@@ -113,7 +140,32 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
       est.country.extent <- country.extent 
       est.country.extent@xmin <- 0
       country.est<-crop(GetCountry(country.code), est.country.extent)
-      r.est <- GetWCSCoverage(coverages$online.resource[i], wcs.template.est, by.ref=FALSE)
+      
+      # get the west coverage 
+      done <- FALSE
+      retry <- 0
+      while(TRUE){
+        # check exit from loop 
+        if(retry > retrys)
+          break;
+
+        tryCatch({
+          r.est <-GetWCSCoverage(coverages$online.resource[i], wcs.template.est, by.ref=FALSE)
+          done <- TRUE
+          break;
+        },error=function(cond)
+        {
+          rciop.log("DEBUG", paste("Error:", cond, sep=" "))
+          rciop.log("DEBUG", paste("New try in", wait.time, "seconds", sep=" "))
+          Sys.sleep(wait.time)
+        })  
+        retry <- retry + 1
+      }
+      if (!done){
+        rciop.log("DEBUG", paste(country.code, "element not computed", sep=" "))
+        next;
+      }
+      
       r.est.mask.shift <- mask(r.est , country.est)
       est.values <- values(r.est.mask.shift)
       est.notNA <- na.omit(est.values)
@@ -131,6 +183,32 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
             }
       }
     } else {
+
+      # get the coverage 
+      done <- FALSE
+      retry <- 0
+      while(TRUE){
+        # check exit from loop 
+        if(retry > retrys)
+          break;
+
+        tryCatch({
+          r <-GetWCSCoverage(coverages$online.resource[i], wcs.template, by.ref=FALSE)
+          done <- TRUE
+          break;
+        },error=function(cond)
+        {
+          rciop.log("DEBUG", paste("Error:", cond, sep=" "))
+          rciop.log("DEBUG", paste("New try in", wait.time, "seconds", sep=" "))
+          Sys.sleep(wait.time)
+        })  
+        retry <- retry + 1
+      }
+      if (!done){
+        rciop.log("DEBUG", paste(country.code, "element not computed", sep=" "))
+        next;
+      }
+
       # country completly in the est or west part
       x.shift <- 0
       if(gContains(basePolygon, readWKT(country.polygon)))
