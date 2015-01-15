@@ -37,7 +37,7 @@ wcs.template <- GetWCSTemplate()
 wcs.template$value[wcs.template$param == "service"] <- "WCS" 
 wcs.template$value[wcs.template$param == "version"] <- "1.0.0"
 wcs.template$value[wcs.template$param == "request"] <- "GetCoverage"
-wcs.template$value[wcs.template$param == "coverage"] <- "sla"
+wcs.template$value[wcs.template$param == "coverage"] <- "burned_area"
 wcs.template$value[wcs.template$param == "format"] <- "NetCDF3"
 
 # waiting time before retry
