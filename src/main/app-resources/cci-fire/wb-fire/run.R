@@ -49,8 +49,6 @@ retries <- 2
 f <- file("stdin")
 open(f)
 
-basePolygon <- readWKT("POLYGON((-180 -90, -180 90, 0 90, 0 -90,-180 -90))")
-
 while(length(country.code <- readLines(f, n=1)) > 0) {
   
   if(IsISOCodeInvalid(country.code)){
@@ -60,7 +58,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
 
   rciop.log("DEBUG", paste("Country ISO code:", country.code, sep=" "))
 
-  # complete the WCS request with the country envelope (MBR) 
+  # complete the WCS request with the country envelope
   wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelope(country.code)
   
   # the country.code 
@@ -68,20 +66,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
        rciop.log("DEBUG", paste("Country ISO code:", country.code, "wrong or no bbox associated to the Country ISO code",sep=" "))
        next;
   }
-
-  # clipping using the confines of the country
-  split.country <- FALSE
-  country.extent <- extent(GetCountry(country.code))
-  if(country.extent@xmin<0 & country.extent@xmax>0) {
-       split.country <- TRUE
-  }       
   
-  # issue on georef for countries with longitudes<0
-  coordinates <- unlist(strsplit(wcs.template$value[wcs.template$param == "bbox"], ","))
-  country.polygon <- paste("POLYGON((",   coordinates[1], coordinates[2], ",", coordinates[1], coordinates[4], ",",
-                                          coordinates[3], coordinates[4], ",", coordinates[3], coordinates[2], ",",
-                                          coordinates[1], coordinates[2], "))" )
-   
    # get the frontier as SpatialLines
   frontier <- as(GetCountry(country.code),"SpatialLines")
 
@@ -89,144 +74,39 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
   
   for (i in 1:length(coverages$online.resource)) {
 
+    # no need to split raster, the lat long are in the right range [-180:180 | -90:90]
     rciop.log("INFO", paste(i/length(coverages$online.resource)*100, "Processing date:",  format(as.Date(coverages$start[i]), format="%Y-%m"), sep=" "))
               
-    if(split.country){
+    # get the coverage 
+    done <- FALSE
+    retry <- 0
+    while(TRUE){
+      # check exit from loop 
+      if(retry > retries)
+        break;
 
-      # the country crosses the Greenwich meridian, need to split the country in 2 parts, the est one and west one
-
-      # west part of the country
-      wcs.template.west <- wcs.template
-      #bbox: xmin,ymin,xmax,ymax
-      wcs.template.west$value[wcs.template.west$param == "bbox"] <- paste(as.numeric(coordinates[1]) + 360,coordinates[2],360,coordinates[4],sep=",")
-      west.country.extent <- country.extent 
-      west.country.extent@xmax <- 0
-      country.west<-crop(GetCountry(country.code), west.country.extent)
-
-      # get the west coverage 
-      done <- FALSE
-      retry <- 0
-      while(TRUE){
-        # check exit from loop 
-        if(retry > retries)
-          break;
-
-        tryCatch({
-          r.west <-GetWCSCoverage(coverages$online.resource[i], wcs.template.west, by.ref=FALSE)
-          done <- TRUE
-          break;
-        },error=function(cond)
-        {
-          rciop.log("DEBUG", paste("Error:", cond, sep=" "))
-          rciop.log("DEBUG", paste("New try in", wait.time, "seconds", sep=" "))
-          Sys.sleep(wait.time)
-        })  
-        retry <- retry + 1
-      }
-      if (!done){
-        rciop.log("DEBUG", paste(country.code, "element not computed", sep=" "))
-        next;
-      }
-
-      r.west.shift <- shift(r.west, x=-360,y=0)
-      r.west.mask.shift <- mask(r.west.shift, country.west)
-      west.values <- values(r.west.mask.shift)
-      west.notNA <- na.omit(west.values)
-
-      # est part of the country
-      wcs.template.est <- wcs.template
-      #bbox: xmin,ymin,xmax,ymax
-      wcs.template.est$value[wcs.template.est$param == "bbox"] <- paste(0,coordinates[2],coordinates[3],coordinates[4],sep=",")
-      est.country.extent <- country.extent 
-      est.country.extent@xmin <- 0
-      country.est<-crop(GetCountry(country.code), est.country.extent)
-      
-      # get the west coverage 
-      done <- FALSE
-      retry <- 0
-      while(TRUE){
-        # check exit from loop 
-        if(retry > retries)
-          break;
-
-        tryCatch({
-          r.est <-GetWCSCoverage(coverages$online.resource[i], wcs.template.est, by.ref=FALSE)
-          done <- TRUE
-          break;
-        },error=function(cond)
-        {
-          rciop.log("DEBUG", paste("Error:", cond, sep=" "))
-          rciop.log("DEBUG", paste("New try in", wait.time, "seconds", sep=" "))
-          Sys.sleep(wait.time)
-        })  
-        retry <- retry + 1
-      }
-      if (!done){
-        rciop.log("DEBUG", paste(country.code, "element not computed", sep=" "))
-        next;
-      }
-      
-      r.est.mask.shift <- mask(r.est , country.est)
-      est.values <- values(r.est.mask.shift)
-      est.notNA <- na.omit(est.values)
-
-      # put the 2 raster together to get the complete country raster
-      r.mask <- raster()
-      if(length(est.notNA)>0 && length(west.notNA)>0){
-        r.mask <- merge(r.west.mask.shift, r.est.mask.shift, tolerance = 0.1, ext=country.extent)
-      }else{
-            if(length(west.notNA)>0){
-              r.mask <- r.west.mask.shift
-            }
-            if(length(est.notNA)>0){
-              r.mask <- r.est.mask.shift
-            }
-      }
-    } else {
-
-      # get the coverage 
-      done <- FALSE
-      retry <- 0
-      while(TRUE){
-        # check exit from loop 
-        if(retry > retries)
-          break;
-
-        tryCatch({
-          r <-GetWCSCoverage(coverages$online.resource[i], wcs.template, by.ref=FALSE)
-          done <- TRUE
-          break;
-        },error=function(cond)
-        {
-          rciop.log("DEBUG", paste("Error:", cond, sep=" "))
-          rciop.log("DEBUG", paste("New try in", wait.time, "seconds", sep=" "))
-          Sys.sleep(wait.time)
-        })  
-        retry <- retry + 1
-      }
-      if (!done){
-        rciop.log("DEBUG", paste(country.code, "element not computed", sep=" "))
-        next;
-      }
-
-      # country completly in the est or west part
-      x.shift <- 0
-      if(gContains(basePolygon, readWKT(country.polygon)))
-           x.shift <- -360
-      
-      r.shift <- shift(r, x= x.shift, y=0)
-    
-      # clip with the country confines
-      r.mask <- mask(r.shift, GetCountry(country.code) )
+      tryCatch({
+        r <-GetWCSCoverage(coverages$online.resource[i], wcs.template, by.ref=FALSE)
+        done <- TRUE
+        break;
+      },error=function(cond)
+      {
+        rciop.log("DEBUG", paste("Error:", cond, sep=" "))
+        rciop.log("DEBUG", paste("New try in", wait.time, "seconds", sep=" "))
+        Sys.sleep(wait.time)
+      })  
+      retry <- retry + 1
+    }
+    if (!done){
+      rciop.log("DEBUG", paste(country.code, "element not computed", sep=" "))
+      next;
     }
 
-    # get data along the frontier
-    # see http://gis.stackexchange.com/questions/92221/extract-raster-from-raster-using-polygon-shapefile-in-r
-    cr <- crop(r.mask, extent(frontier), snap="near")                    
-    fr <- rasterize(frontier, cr)   
-    r.boundary <- mask(x=cr, mask=fr)
-
-    json.list <- c(json.list, list(list(iso=country.code, var=series[1,"identifier"], time=paste(format(as.Date(coverages$start[i]), format="%Y-%m"), "15", sep="-"), value=cellStats(r.boundary, stat="mean"))))
+    # no need to check for shift, because lat,long in < -180:180 | -90:90 > format
+    # get data inside the country confines
+    r.innerArea <- mask(r, GetCountry(country.code) )
+    
+    json.list <- c(json.list, list(list(iso=country.code, var=series[1,"identifier"], time=paste(format(as.Date(coverages$start[i]), format="%Y-%m"), "15", sep="-"), value=cellStats(r.innerArea, stat="mean"))))
     
     # delete the WCS downloaded raster (the other raster are in memory)
     file.remove(r@file@name)
