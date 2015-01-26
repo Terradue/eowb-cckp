@@ -76,6 +76,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
        split.country <- TRUE
   }
     
+  country.frontier <- as(GetCountry(country.code),"SpatialLines")  
   # issue on georef for countries with longitudes<0
   coordinates <- unlist(strsplit(wcs.template$value[wcs.template$param == "bbox"], ","))
   country.polygon <- paste("POLYGON((",   coordinates[1], coordinates[2], ",", coordinates[1], coordinates[4], ",",
@@ -90,7 +91,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
    
     if(split.country){
 
-      # the country crosses the Greenwich meridian, need to split the country in 2 parts, the est one and west one
+      # the country crosses the Greenwich meridian, need to split the country in 2 parts, the east one and west one
 
       # west part of the country
       wcs.template.west <- wcs.template
@@ -130,13 +131,13 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
       west.values <- values(r.west.mask.shift)
       west.notNA <- na.omit(west.values)
 
-      # est part of the country
-      wcs.template.est <- wcs.template
+      # east part of the country
+      wcs.template.east <- wcs.template
       #bbox: xmin,xmax,ymin,ymax
-      wcs.template.est$value[wcs.template.est$param == "bbox"] <- paste(0,coordinates[2],coordinates[3],coordinates[4],sep=",")
-      est.country.extent <- country.extent 
-      est.country.extent@xmin <- 0
-      country.est<-crop(GetCountry(country.code), est.country.extent)
+      wcs.template.east$value[wcs.template.east$param == "bbox"] <- paste(0,coordinates[2],coordinates[3],coordinates[4],sep=",")
+      east.country.extent <- country.extent 
+      east.country.extent@xmin <- 0
+      country.east<-crop(GetCountry(country.code), east.country.extent)
 
       # get the west coverage 
       done <- FALSE
@@ -147,7 +148,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
           break;
 
         tryCatch({
-          r.est <-GetWCSCoverage(coverages$online.resource[i], wcs.template.est, by.ref=FALSE)
+          r.east <-GetWCSCoverage(coverages$online.resource[i], wcs.template.east, by.ref=FALSE)
           done <- TRUE
           break;
         },error=function(cond)
@@ -163,20 +164,20 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
         next;
       }
 
-      r.est.mask.shift <- mask(r.est , country.est)
-      est.values <- values(r.est.mask.shift)
-      est.notNA <- na.omit(est.values)
+      r.east.mask.shift <- mask(r.east , country.east)
+      east.values <- values(r.east.mask.shift)
+      east.notNA <- na.omit(east.values)
 
       # put the 2 raster together to get the complete country raster
       r.mask <- raster()
-      if(length(est.notNA)>0 && length(west.notNA)>0){
-        raster.temp <- merge(r.west.mask.shift, r.est.mask.shift, tolerance = 0.1, ext=country.extent)
+      if(length(east.notNA)>0 && length(west.notNA)>0){
+        raster.temp <- merge(r.west.mask.shift, r.east.mask.shift, tolerance = 0.1, ext=country.extent)
       }else{
             if(length(west.notNA)>0){
               raster.temp <- r.west.mask.shift
             }
-            if(length(est.notNA)>0){
-              raster.temp <- r.est.mask.shift
+            if(length(east.notNA)>0){
+              raster.temp <- r.east.mask.shift
             }
       }
 
@@ -211,7 +212,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
         next;
       }
 
-      # country completly in the est or west part
+      # country completly in the east or west part
       x.shift <- 0
       if(gContains(basePolygon, readWKT(country.polygon)))
            x.shift <- -360
