@@ -60,8 +60,8 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
 
   rciop.log("DEBUG", paste("Country ISO code:", country.code, sep=" "))
 
-  # complete the WCS request with the country envelope (MBR) 
-  wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelopeEEZ(country.code)
+  # complete the WCS request with the country envelope (MBR). 
+  wcs.template$value[wcs.template$param == "bbox"] <- GetCountryEnvelope(country.code)
   
   # the country.code 
   if(is.na(wcs.template$value[wcs.template$param == "bbox"])){
@@ -69,9 +69,9 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
        next;
   }
        
-  # clipping using the EEZ of the country
+  # clipping using the country boundary
   split.country <- FALSE
-  country.extent <- extent(GetCountryEEZ(country.code))
+  country.extent <- extent(GetCountry(country.code))
   if(country.extent@xmin<0 & country.extent@xmax>0) {
        split.country <- TRUE
   }
@@ -98,7 +98,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
       wcs.template.west$value[wcs.template.west$param == "bbox"] <- paste(as.numeric(coordinates[1]) + 360,coordinates[2],360,coordinates[4],sep=",")
       west.country.extent <- country.extent 
       west.country.extent@xmax <- 0
-      country.west<-crop(GetCountryEEZ(country.code), west.country.extent)
+      country.west<-crop(GetCountry(country.code), west.country.extent)
 
       # get the west coverage 
       done <- FALSE
@@ -136,7 +136,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
       wcs.template.est$value[wcs.template.est$param == "bbox"] <- paste(0,coordinates[2],coordinates[3],coordinates[4],sep=",")
       est.country.extent <- country.extent 
       est.country.extent@xmin <- 0
-      country.est<-crop(GetCountryEEZ(country.code), est.country.extent)
+      country.est<-crop(GetCountry(country.code), est.country.extent)
 
       # get the west coverage 
       done <- FALSE
@@ -170,15 +170,20 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
       # put the 2 raster together to get the complete country raster
       r.mask <- raster()
       if(length(est.notNA)>0 && length(west.notNA)>0){
-        r.mask <- merge(r.west.mask.shift, r.est.mask.shift, tolerance = 0.1, ext=country.extent)
+        raster.temp <- merge(r.west.mask.shift, r.est.mask.shift, tolerance = 0.1, ext=country.extent)
       }else{
             if(length(west.notNA)>0){
-              r.mask <- r.west.mask.shift
+              raster.temp <- r.west.mask.shift
             }
             if(length(est.notNA)>0){
-              r.mask <- r.est.mask.shift
+              raster.temp <- r.est.mask.shift
             }
       }
+
+      cr <- crop(raster.temp, extent(country.frontier), snap="near")                    
+      fr <- rasterize(country.frontier, cr)   
+      r.mask <- mask(x=cr, mask=fr)
+
     } else {
       
        # get the coverage 
@@ -214,7 +219,10 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
       r.shift <- shift(r, x= x.shift, y=0)
     
       # clip with the country confines
-      r.mask <- mask(r.shift, GetCountryEEZ(country.code) )
+      raster.temp <- mask(r.shift, GetCountry(country.code) )
+      cr <- crop(raster.temp, extent(country.frontier), snap="near")                    
+      fr <- rasterize(country.frontier, cr)   
+      r.mask <- mask(x=cr, mask=fr)   
     }
 
     json.list <- c(json.list, list(list(iso=country.code, var=series[1,"identifier"], time=paste(format(as.Date(coverages$start[i]), format="%Y-%m"), "15", sep="-"), value=cellStats(r.mask, stat="mean"))))
