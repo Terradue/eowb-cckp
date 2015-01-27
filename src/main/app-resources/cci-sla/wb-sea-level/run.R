@@ -24,8 +24,10 @@ df.params$value[df.params$type == "time:end"] <- end.date
 res <- Query(osd.url, response.type, df.params)
 
 # get the series to retrieve the variable name
-series <- xmlToDataFrame(nodes = getNodeSet(xmlParse(res), 
-    "//dclite4g:Series"), stringsAsFactors = FALSE)
+# series <- xmlToDataFrame(nodes = getNodeSet(xmlParse(res), "//dclite4g:Series"), stringsAsFactors = FALSE)
+
+#variable name cabled in code
+var.series <- "cci-sla"
 
 # create a named list with the WCS online resources and associated start date 
 coverages <- list(online.resource=rev(xpathSApply(xmlParse(res), "//dclite4g:DataSet/dclite4g:onlineResource/ws:WCS/@rdf:about")), 
@@ -226,7 +228,8 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
       r.mask <- mask(x=cr, mask=fr)   
     }
 
-    json.list <- c(json.list, list(list(iso=country.code, var=series[1,"identifier"], time=paste(format(as.Date(coverages$start[i]), format="%Y-%m"), "15", sep="-"), value=cellStats(r.mask, stat="mean"))))
+    #json.list <- c(json.list, list(list(iso=country.code, var=series[1,"identifier"], time=paste(format(as.Date(coverages$start[i]), format="%Y-%m"), "15", sep="-"), value=cellStats(r.mask, stat="mean"))))
+    json.list <- c(json.list, list(list(iso=country.code, var=var.series, time=paste(format(as.Date(coverages$start[i]), format="%Y-%m"), "15", sep="-"), value=cellStats(r.mask, stat="mean"))))
     
     # delete the WCS downloaded raster (the other raster are in memory)
     file.remove(r@file@name)
