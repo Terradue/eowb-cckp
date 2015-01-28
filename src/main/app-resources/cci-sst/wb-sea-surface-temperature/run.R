@@ -141,6 +141,10 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
     
   }
 
+  # removing object from memory
+  rm(r)
+  rm(r.mask)
+
   json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
 
   writeLines(toJSON(list(items=json.list), pretty=TRUE), json.filename)
