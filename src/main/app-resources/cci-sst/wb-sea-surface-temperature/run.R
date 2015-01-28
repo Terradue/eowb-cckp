@@ -129,7 +129,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
 
     if(!jump.to.next.country){
       #json.list <- c(json.list, list(list(iso=country.code, var=series[1,"identifier"], time=paste(format(as.Date(coverages$start[i]), format="%Y-%m"), "15", sep="-"), value=cellStats(r.mask, stat="mean"))))
-      json.list <- c(json.list, list(list(iso=country.code, var=var.series, time=paste(format(as.Date(coverages$start[i]), format="%Y-%m-%d"), "15", sep="-"), value=cellStats(r.mask, stat="mean"))))
+      json.list <- c(json.list, list(list(iso=country.code, var=var.series, time=paste(format(as.Date(coverages$start[i]), format="%Y-%m-%d"), sep="-"), value=cellStats(r.mask, stat="mean"))))
       
       # delete the WCS downloaded raster (the other raster are in memory)
       file.remove(r@file@name)  
@@ -140,18 +140,18 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
     }
     
   }
-
-  json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
-
-  writeLines(toJSON(list(items=json.list), pretty=TRUE), json.filename)
-
-  res <- rciop.publish(json.filename, metalink=TRUE, recursive=FALSE)
-   
-  if (res$exit.code==0) { published <- res$output }
-
-  file.remove(json.filename)
-
-  # post json to datastore
-  POSTRequest(access.point=data.api, content=toJSON(list(items=json.list)), content.type="application/json")
-
 }
+
+json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
+
+writeLines(toJSON(list(items=json.list), pretty=TRUE), json.filename)
+
+res <- rciop.publish(json.filename, metalink=TRUE, recursive=FALSE)
+ 
+if (res$exit.code==0) { published <- res$output }
+
+file.remove(json.filename)
+
+# post json to datastore
+POSTRequest(access.point=data.api, content=toJSON(list(items=json.list)), content.type="application/json")
+
