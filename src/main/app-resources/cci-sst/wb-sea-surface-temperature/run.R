@@ -23,11 +23,8 @@ df.params$value[df.params$type == "time:end"] <- end.date
 # submit the query
 res <- Query(osd.url, response.type, df.params)
 
-# get the series to retrieve the variable name
-# series <- xmlToDataFrame(nodes = getNodeSet(xmlParse(res), "//dclite4g:Series"), stringsAsFactors = FALSE)
-
-#variable name cabled in code
-var.series <- "cci-sst"   # TBD (dataset says "SST")
+#routing variable 
+var.series <- "ghrsst-ukmo"   
 
 # create a named list with the WCS online resources and associated start date 
 coverages <- list(online.resource=rev(xpathSApply(xmlParse(res), "//dclite4g:DataSet/dclite4g:onlineResource/ws:WCS/@rdf:about")), 
@@ -132,7 +129,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
 
     if(!jump.to.next.country){
       #json.list <- c(json.list, list(list(iso=country.code, var=series[1,"identifier"], time=paste(format(as.Date(coverages$start[i]), format="%Y-%m"), "15", sep="-"), value=cellStats(r.mask, stat="mean"))))
-      json.list <- c(json.list, list(list(iso=country.code, var=var.series, time=paste(format(as.Date(coverages$start[i]), format="%Y-%m"), "15", sep="-"), value=cellStats(r.mask, stat="mean"))))
+      json.list <- c(json.list, list(list(iso=country.code, var=var.series, time=paste(format(as.Date(coverages$start[i]), format="%Y-%m-%d"), "15", sep="-"), value=cellStats(r.mask, stat="mean"))))
       
       # delete the WCS downloaded raster (the other raster are in memory)
       file.remove(r@file@name)  
@@ -144,17 +141,17 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
     
   }
 
-json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
+  json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
 
-writeLines(toJSON(list(items=json.list), pretty=TRUE), json.filename)
+  writeLines(toJSON(list(items=json.list), pretty=TRUE), json.filename)
 
-res <- rciop.publish(json.filename, metalink=TRUE, recursive=FALSE)
- 
-if (res$exit.code==0) { published <- res$output }
+  res <- rciop.publish(json.filename, metalink=TRUE, recursive=FALSE)
+   
+  if (res$exit.code==0) { published <- res$output }
 
-file.remove(json.filename)
+  file.remove(json.filename)
 
   # post json to datastore
-  #POSTRequest(access.point=data.api, content=toJSON(list(items=json.list)), content.type="application/json")
+  POSTRequest(access.point=data.api, content=toJSON(list(items=json.list)), content.type="application/json")
 
 }

@@ -217,7 +217,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
       # country completly in the east or west part
       x.shift <- 0
       if(gContains(basePolygon, readWKT(country.polygon)))
-           x.shift <- -360
+           x.shift <-- 360
       
       r.shift <- shift(r, x= x.shift, y=0)
     
