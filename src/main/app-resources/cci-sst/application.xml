@@ -7,7 +7,8 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="${artifactId}">
       <defaultParameters>
         <parameter id="catalogue">http://catalogue.eowb-cckp.terradue.int/catalogue/search/UKMO_OSTIA/description</parameter>
         <parameter id="response.type">application/rdf+xml</parameter>
-        <parameter id="search.date">2013-01-01</parameter>
+        <parameter id="start.date">2013-01-01</parameter>
+        <parameter id="stop.date">2013-01-01</parameter>
         <parameter id="count">300</parameter>
         <parameter id="data.api">http://data.terradue.int/gs/catalogue/eowb/cci-v1</parameter>
       </defaultParameters>

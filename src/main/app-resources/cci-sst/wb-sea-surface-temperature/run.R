@@ -7,8 +7,8 @@ library("rgeos")
 library("ReoWBcckp", lib.loc="/application/share/R/library/")
 
 osd.url <- rciop.getparam("catalogue")
-start.date <- rciop.getparam("search.date")
-end.date <- start.date
+start.date <- rciop.getparam("start.date")
+stop.date <- rciop.getparam("stop.date")
 response.type <- rciop.getparam("response.type")
 count <- rciop.getparam("count")
 data.api <- rciop.getparam("data.api")
@@ -16,9 +16,9 @@ data.api <- rciop.getparam("data.api")
 # prepare the catalogue request
 df.params <- GetOSQueryables(osd.url, response.type)
 
-df.params$value[df.params$type == "count"] <- count 
+df.params$value[df.params$type == "count"] <- count
 df.params$value[df.params$type == "time:start"] <- start.date
-df.params$value[df.params$type == "time:end"] <- end.date 
+df.params$value[df.params$type == "time:end"] <- stop.date
 
 # submit the query
 res <- Query(osd.url, response.type, df.params)
@@ -42,7 +42,7 @@ wcs.template$value[wcs.template$param == "format"] <- "NetCDF3"
 # waiting time before retry
 wait.time <- 1
 # number of retry
-retries <- 2
+retries <- 1
 
 # read the stdin into a file
 f <- file("stdin")
@@ -89,7 +89,7 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
   
   for (i in 1:length(coverages$online.resource)) {
 
-    rciop.log("INFO", paste(i/length(coverages$online.resource)*100, "Processing date:",  format(as.Date(coverages$start[i]), format="%Y-%m"), sep=" "))
+    rciop.log("INFO", paste(i/length(coverages$online.resource)*100, "Processing date:",  format(as.Date(coverages$start[i]), format="%Y-%m-%d"), sep=" "))
     # NOTE: no split needed for  countries crossing the Greenwich meridian (check)
       
      # get the coverage 
@@ -140,18 +140,28 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
     }
     
   }
+
+  json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
+
+  writeLines(toJSON(list(items=json.list), pretty=TRUE), json.filename)
+
+  res <- rciop.publish(json.filename, metalink=TRUE, recursive=FALSE)
+   
+  if (res$exit.code==0) { published <- res$output }
+  file.remove(json.filename)
+
+  # post json to datastore
+  response <- POSTRequest(access.point=data.api, content=toJSON(list(items=json.list)), content.type="application/json")
+  if(response$status!=200)
+  {
+    rciop.log("ERROR", paste("Error while sanding", json.filename, "to the catalogue" sep=" "))  
+    rciop.log("ERROR", paste("Message:", response$message sep=" "))  
+  }else {
+    rciop.log("DEBUG", paste(json.filename, "correctly sent to the catalogue" sep=" "))  
+  }
+  
+
 }
 
-json.filename <- paste(TMPDIR, "/", country.code, ".json", sep="")
 
-writeLines(toJSON(list(items=json.list), pretty=TRUE), json.filename)
-
-res <- rciop.publish(json.filename, metalink=TRUE, recursive=FALSE)
- 
-if (res$exit.code==0) { published <- res$output }
-
-file.remove(json.filename)
-
-# post json to datastore
-POSTRequest(access.point=data.api, content=toJSON(list(items=json.list)), content.type="application/json")
 
