@@ -1,12 +1,3 @@
-#cci-sst 
-
-This application computes, for each country the mean of the sea temperature for a given day.
-
-##Application
-
-You can check the precision of the result using the following procedure. You need to store in a folder the json file computed by the cci-sst application 
-
-```coffee
 library(devtools)
 library(raster)
 library(ReoWBcckp)
@@ -79,7 +70,6 @@ while(checks>0){
      new.date <- paste(year, month, day, sep="-")
      
      if(!(new.date %in% dates)){
-     	  # only differents dates
           dates <- c(dates, new.date)
           checks <- checks -1
      }
@@ -127,25 +117,3 @@ for(j in seq(along=dates)){
 # put data on a dataframe for visualization
 df <- data.frame(Country = the.country, Date = date.extraction, ValueFromCatalogue = values.fromCatalogue, ComputedValue = results, Verified = ok )
 print(df)
-
-```
-
-##Print Example
-We choose to print the data for the following countries: Portugal (PRT), United Kingdom (GBR), Italy (ITA), France (FRA), Australia (AUS), United State of America (USA), Argentina (ARG).
-This is the output:
-
-```coffee
-Country Date 		ValueFromCatalogue 	ComputedValue 	Verified
-PRT 	2013-04-26 	289.86 				289.86       	OK
-PRT 	2006-11-03 	293.67        		293.67       	OK
-ASM 	2011-09-23 	300.86        		300.86       	OK
-BRB 	2011-09-23 	301.82        		301.82       	OK
-BVT 	2011-09-23 	272.44        		272.44       	OK
-CAN 	2011-09-23 	276.22        		276.22       	OK
-CMR 	2011-09-23 	299.78        		299.78       	OK
-COG 	2011-09-23 	297.78        		297.78       	OK
-COL 	2011-09-23 	301.24        		301.24       	OK
-DNK 	2011-09-23 	287.53        		287.53       	OK
-DOM 	2011-09-23 	302.25        		302.25       	OK
-FRA 	2011-09-23 	291.84        		291.84       	OK
-```

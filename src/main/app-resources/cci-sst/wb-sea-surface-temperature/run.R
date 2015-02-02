@@ -158,7 +158,9 @@ while(length(country.code <- readLines(f, n=1)) > 0) {
   response <- POSTRequest(access.point=data.api, content=toJSON(list(items=json.list)), content.type="application/json")
   if(response$status!=200)
   {
-    rciop.log("ERROR", paste("Error while sanding", json.filename, "to the catalogue", sep=" "))  
+    error.message <- paste("Error while sanding", json.filename, "to the catalogue", sep=" ")
+    print(error.message)
+    rciop.log("ERROR", error.message)  
     rciop.log("ERROR", paste("Message:", response$message, sep=" "))  
   }else {
     rciop.log("DEBUG", paste(json.filename, "correctly sent to the catalogue", sep=" "))  
