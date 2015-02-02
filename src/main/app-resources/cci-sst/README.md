@@ -131,12 +131,12 @@ print(df)
 ```
 
 ##Print Example
-We choose to print the data for the following countries: Portugal (PRT), United Kingdom (GBR), Italy (ITA), France (FRA), Australia (AUS), United State of America (USA), Argentina (ARG).
+We choose to print data for 3 random generated dates. The 3 random generated dates are: "2013-04-26", "2006-11-03", "2011-09-23".
 This is the output:
 
 ```coffee
 Country Date 		ValueFromCatalogue 	ComputedValue 	Verified
-PRT 	2013-04-26 	289.86 				289.86       	OK
+PRT 	2013-04-26 	289.86 			289.86       	OK
 PRT 	2006-11-03 	293.67        		293.67       	OK
 ASM 	2011-09-23 	300.86        		300.86       	OK
 BRB 	2011-09-23 	301.82        		301.82       	OK
