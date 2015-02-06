@@ -1,28 +1,43 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="${artifactId}">
- <jobTemplates>
+  <jobTemplates>
+    <jobTemplate id="wbsplitter">
+      <streamingExecutable>/application/wbsplitter/run.sh</streamingExecutable>
+      <defaultParameters>
+        <parameter id="startdate">2008-01-01</parameter>
+        <parameter id="stopdate">2008-01-02</parameter>
+      </defaultParameters>
+      <defaultJobconf>
+    	  <property id="mapred.task.timeout">6000000</property>
+    	  <property id="ciop.job.max.tasks">1</property>
+      </defaultJobconf>
+    </jobTemplate>
     <jobTemplate id="wb-sea-surface-temperature">
       <streamingExecutable>/application/wb-sea-surface-temperature/run.R</streamingExecutable>
       <defaultParameters>
-        <parameter id="catalogue">http://catalogue.eowb-cckp.terradue.int/catalogue/search/UKMO_OSTIA/description</parameter>
-        <parameter id="response.type">application/rdf+xml</parameter>
-        <parameter id="start.date">2013-01-01</parameter>
-        <parameter id="stop.date">2013-01-01</parameter>
-        <parameter id="count">300</parameter>
-        <parameter id="data.api">http://data.terradue.int/gs/catalogue/eowb/cci-v1</parameter>
+      	<parameter id="catalogue">http://catalogue.eowb-cckp.terradue.int/catalogue/search/UKMO_OSTIA/description</parameter>
+      	<parameter id="responsetype">application/rdf+xml</parameter>
+      	<parameter id="dataapi">http://data.terradue.int/gs/catalogue/eowb/cci-v1</parameter>
       </defaultParameters>
       <defaultJobconf>
-          <property id="mapred.task.timeout">6000000</property>
+        <property id="mapred.task.timeout">6000000</property>
       </defaultJobconf>
     </jobTemplate>
   </jobTemplates>
   <workflow id="sstWorkflow" title="SST Process" abstract="Computing the sea surface temperature daily for each country">
     <workflowVersion>1.0</workflowVersion>
+    <node id="n-wbsplitter">
+      <job id="wbsplitter"/>
+      <sources>
+        <source scope="runtime" id="ISO3166" title="ISO 3166-1 alpha-3" abstract="ISO 3166-1 is part of the ISO 3166 standard published by the International Organization for Standardization (ISO), and defines codes for the names of countries, dependent territories, and special areas of geographical interest."  refid="file:urls">/application/data/countries.txt</source>
+      </sources>
+      <parameters/>
+    </node>
     <node id="n-wb-sea-surface-temperature">
       <job id="wb-sea-surface-temperature"/>
       <sources>
-        <source scope="runtime" id="ISO3166-1-alpha-3" title="ISO 3166-1 alpha-3" abstract="ISO 3166-1 is part of the ISO 3166 standard published by the International Organization for Standardization (ISO), and defines codes for the names of countries, dependent territories, and special areas of geographical interest."  refid="file:urls">/application/data/countries.txt</source>
+        <source refid="wf:node">n-wbsplitter</source>
       </sources>
       <parameters/>
     </node>
